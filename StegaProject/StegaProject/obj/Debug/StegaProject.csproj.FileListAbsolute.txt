@@ -8,3 +8,5 @@ C:\Users\Mikke\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug
 C:\Users\Mikke\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.csproj.GenerateResource.Cache
 C:\Users\Mikke\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.exe
 C:\Users\Mikke\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.pdb
+C:\Users\mathias\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.exe
+C:\Users\mathias\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.pdb
