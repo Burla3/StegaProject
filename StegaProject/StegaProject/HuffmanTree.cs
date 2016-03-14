@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HuffmanTreeTestingProject
+namespace HuffmanTreeBuilder
 {
     class HuffmanTree {
         static LinkedList<LinkedList<string>> DHTLists;
