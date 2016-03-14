@@ -6,6 +6,9 @@ using System.Globalization;
 using System.IO;
 
 namespace StegaProject {
+    /// <summary>
+    /// This class holds methods to extract different markers' data, compressed image data and all data from JPEG files.
+    /// </summary>
     class JPEGExtractor {
         private const byte MARKERLENGTH = 2;
         private const byte FIELDLENGTHOFFSET = 2;
@@ -91,6 +94,18 @@ namespace StegaProject {
             return false;
         }
 
+        /// <summary>
+        /// Calls the LoadImage method.
+        /// </summary>
+        /// <param name="path">Path to the image file you wish to extract from.</param>
+        public JPEGExtractor( string path ) {
+            LoadImage( path );
+        }
+
+        /// <summary>
+        /// Loads an image file into the class.
+        /// </summary>
+        /// <param name="path">Path to the image file you wish to extract from.</param>
         public void LoadImage( string path ) {
             try {
                 Image image = Image.FromFile( path );
@@ -101,31 +116,61 @@ namespace StegaProject {
             }
         }
 
+
+        /// <summary>
+        /// Saves a MemoryStream as a JPEG image file at the given path.
+        /// </summary>
+        /// <param name="imageStream">MemoryStream containing JPEG image bytes.</param>
+        /// <param name="path">Path to the image file you wish to save.</param>
         public void SaveImage( MemoryStream imageStream, string path ) {
             Image image = Image.FromStream( imageStream );
             image.Save( path, ImageFormat.Jpeg );
         }
 
+        /// <summary>
+        /// Gets DefineQuantizationTable marker data as a List.
+        /// </summary>
+        /// <returns>A List containing DefineQuantizationTable marker data.</returns>
         public List<string> GetDQT() {
             return GetFieldData( DQTMARKER );
         }
 
+        /// <summary>
+        /// Gets DefineHuffmanTable marker data as a List.
+        /// </summary>
+        /// <returns>A List containing DefineHuffmanTable marker data.</returns>
         public List<string> GetDHT() {
             return GetFieldData( DHTMARKER );
         }
 
+        /// <summary>
+        /// Gets DefineRestartInteroperability marker data as a List.
+        /// </summary>
+        /// <returns>A List containing DefineRestartInteroperability marker data.</returns>
         public List<string> GetDRI() {
             return GetFieldData( DRIMARKER );
         }
 
+        /// <summary>
+        /// Gets StartOfFrame marker data as a List.
+        /// </summary>
+        /// <returns>A List containing StartOfFrame marker data.</returns>
         public List<string> GetSOF() {
             return GetFieldData( SOFMARKER );
         }
 
+        /// <summary>
+        /// Gets StartOfScan marker data as a List.
+        /// </summary>
+        /// <returns>A List containing StartOfScan marker data.</returns>
         public List<string> GetSOS() {
             return GetFieldData( SOSMARKER );
         }
 
+        /// <summary>
+        /// Gets compressed image data as a string.
+        /// </summary>
+        /// <returns>A string containing compressed image data.</returns>
         public string GetCompressedImageData() {
             int index = FindMarker( SOSMARKER );
 
@@ -146,6 +191,10 @@ namespace StegaProject {
             return ReplaceDashesWithSpaces( BitConverter.ToString( imageBytes, startIndex, endIndex - startIndex ) );
         }
 
+        /// <summary>
+        /// Gets all data from MemoryStream as a string.
+        /// </summary>
+        /// <returns>A string containing all data from MemoryStream.</returns>
         public string GetAllData() {
             return ReplaceDashesWithSpaces( BitConverter.ToString( imageBytes, 0, imageBytes.Length ) );
         }
