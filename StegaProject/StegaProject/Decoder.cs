@@ -8,56 +8,133 @@ using HuffmanTreeBuilder;
 namespace StegaProject {
     class Decoder {
 
-        private List<HuffmanTree> buildHuffmanTrees;
+        enum HuffmanTable {
+            LumDC = 0, LumAC = 1, ChromDC = 2, ChromAC = 3
+        }
 
-        private List<string> huffmanTrees;
+        private List<HuffmanTree> HuffmanTrees { get; set; }
+        public List<EntropyComponent> EntropyComponents { get; private set; }
 
-        private string binaryData;
-
+        private string BinaryData { get; set; }
+        private int CurrentIndex { get; set; }
 
         public Decoder(string path) {
+            CurrentIndex = 0;
+            JPEGExtractor extractor = new JPEGExtractor();
+            HuffmanTrees = new List<HuffmanTree>();
+            EntropyComponents = new List<EntropyComponent>();
 
-            JPEGExtractor s = new JPEGExtractor();
-            s.LoadImage(path);
+            extractor.LoadImage(path);
+            buildHuffmanTrees(extractor);
+            getBinaryData(extractor);
 
-            string data = s.GetCompressedImageData();
+            decodeBinaryData();
+        }
 
-            huffmanTrees = s.GetDHT();
+        private void buildHuffmanTrees(JPEGExtractor extractor) {
+            List<string> DHT = extractor.GetDHT();
 
-            foreach (string huffmanTree in huffmanTrees) {
-                Console.WriteLine(huffmanTree);
+            foreach (string table in DHT) {
+                Console.WriteLine(table);
             }
 
-            buildHuffmanTrees = new List<HuffmanTree>();
-
-            foreach (string tree in huffmanTrees) {
-                buildHuffmanTrees.Add(new HuffmanTree(tree));
+            foreach (string table in DHT) {
+                HuffmanTrees.Add(new HuffmanTree(table));
             }
+        }
+
+        private void getBinaryData(JPEGExtractor extractor) {
+            string data = extractor.GetCompressedImageData();
 
             for (int i = 0; i < data.Length; i++) {
                 if (data[i] != ' ') {
-                    binaryData += Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0');
+                    BinaryData += Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0');
                 }
             }
 
             Console.WriteLine(data);
-            Console.WriteLine(binaryData);
+            Console.WriteLine(BinaryData);
+        }
 
-            //int currentIndex = 0;
-            //string currentHuffmanCode = "";
-            //string huffmanLeaveValue = "";
+        private void decodeBinaryData() {
+            bool hitEOB;
 
-            //while (currentIndex <= binaryData.Length) {
+            while (CurrentIndex < BinaryData.Length) {
 
-            //    for
+                //Lum
+                for (int i = 0; i < 1; i++) {
+                    decodeValue(HuffmanTable.LumDC);
+                    for (int j = 0; j < 63; j++) {
+                       hitEOB = decodeValue(HuffmanTable.LumAC);
+                        if (hitEOB) {
+                            Console.WriteLine($"AC done");
+                            break;
+                        }  
+                    }
+                }
 
-            //    while (huffmanLeaveValue == "") {
-            //            currentHuffmanCode += binaryData[currentIndex];
-            //            huffmanLeaveValue = buildHuffmanTrees[0].SearchFor(currentHuffmanCode);
-            //        }
+                //Crom
+                for (int i = 0; i < 2; i++) {
+                    decodeValue(HuffmanTable.ChromDC);
+                    for (int j = 0; j < 63; j++) {
+                        hitEOB = decodeValue(HuffmanTable.ChromAC);
+                        if (hitEOB) {
+                            Console.WriteLine($"AC done");
+                            break;
+                        }
+                    }
+                }
+                //TEMP FIX!! NEED REWORK!! 
+               // break;
+            } 
+        }
 
+        private bool decodeValue(HuffmanTable table) {
+            string huffmanLeafValue;
+            string value;
+            string currentHuffmanCode;
 
-            //}
+            getLeafValue(out currentHuffmanCode, out huffmanLeafValue, table);
+
+            if (huffmanLeafValue != "00") {
+                value = getValueCode(huffmanLeafValue);
+
+                if (value == "") {
+                    value = "0";
+                }
+
+                Console.WriteLine($"Huffman {huffmanLeafValue} TreePath {value}");
+
+                EntropyComponents.Add(new EntropyComponent(currentHuffmanCode, huffmanLeafValue, value));
+            } else {
+                return true;
+            }
+
+            return false;
+        }
+
+        private string getLeafValue(out string currentHuffmanCode, out string huffmanLeafValue, HuffmanTable table) {
+            currentHuffmanCode = "";
+            huffmanLeafValue = "";
+
+            while (huffmanLeafValue == "") {
+                currentHuffmanCode += BinaryData[CurrentIndex];
+                huffmanLeafValue = HuffmanTrees[(int)table].SearchFor(currentHuffmanCode);
+                CurrentIndex++;
+            }
+
+            return huffmanLeafValue;
+        }
+
+        private string getValueCode(string huffmanLeafValue) {
+            string value = "";
+            int lenght = Convert.ToInt32(huffmanLeafValue[1].ToString(), 10);
+
+            for (int i = 0; i < lenght; i++, CurrentIndex++) {
+                value += BinaryData[CurrentIndex];
+            }
+
+            return value;
         }
     }
 }

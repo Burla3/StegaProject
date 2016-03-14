@@ -104,7 +104,6 @@ namespace HuffmanTreeBuilder
 
         public LinkedList<string> levelList() {
             // returns the list of values for the treelevel of this node.
-            Console.WriteLine("fetching levelList for {0}", this.lvl);
             return HuffmanTree.DHTLists.ElementAt(this.lvl);
         }
 

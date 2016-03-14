@@ -10,6 +10,10 @@ namespace StegaProject {
 
             Decoder decoder = new Decoder(@"C:\Users\Mikke\Desktop\small-rainbow-60-web-optimized.jpg");
 
+            foreach (EntropyComponent entropyComponent in decoder.EntropyComponents) {
+                Console.WriteLine($"Valuecode {entropyComponent.ValueCode}, HuffmanCode {entropyComponent.HuffmannCode}, HuffmanLeafCode {entropyComponent.HuffmanLeafCode}, DecimalValue {entropyComponent.getDecimalValue()}, LSB {entropyComponent.LSB}");
+            }
+
         }
     }
 }
