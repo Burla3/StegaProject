@@ -8,14 +8,28 @@ namespace StegaProject {
         public Form1() {
             InitializeComponent();
 
-            Decoder decoder = new Decoder(@"C:\Users\Mikke\Desktop\small-rainbow-60-web-optimized.jpg");
+            JPEGExtractor extractor = new JPEGExtractor(@"C:\Users\Nyggi\Desktop\IMG_20160309_160619.jpg");
+            Steganogrify steganogrify = new Steganogrify();
 
-            foreach (EntropyComponent entropyComponent in decoder.EntropyComponents) {
-                Console.WriteLine($"Amplitude {entropyComponent.Amplitude}, HuffmanTreePath {entropyComponent.HuffmanTreePath}, " +
-                                  $"HuffmanLeafHexValue {entropyComponent.HuffmanLeafHexValue}, DecimalValue {entropyComponent.getDecimalValue()}," +
-                                  $" LSB {entropyComponent.LSB}");
-            }
+            Decoder decoder = new Decoder(extractor);
 
+            //foreach (EntropyComponent entropyComponent in decoder.EntropyComponents) {
+            //    if (entropyComponent.Amplitude != "EOB") {
+            //        Console.WriteLine(
+            //            $"Amplitude {entropyComponent.Amplitude}, HuffmanTreePath {entropyComponent.HuffmanTreePath}, " +
+            //            $"HuffmanLeafHexValue {entropyComponent.HuffmanLeafHexValue}, DecimalValue {entropyComponent.getDecimalValue()}," +
+            //            $" LSB {entropyComponent.LSB}");
+            //    }
+            //    else {
+            //        Console.WriteLine("EOB");
+            //    }
+            //}
+
+            steganogrify.changeLSB(decoder.EntropyComponents);
+            
+            //Console.WriteLine(decoder.getReEncodedRawHexData());
+
+            extractor.SaveImage(decoder.getReEncodedRawHexData(), @"C:\Users\Nyggi\Desktop\small-test.jpg");
         }
     }
 }

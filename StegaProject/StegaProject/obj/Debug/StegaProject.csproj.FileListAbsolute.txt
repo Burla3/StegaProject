@@ -10,3 +10,11 @@ C:\Users\Mikke\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug
 C:\Users\Mikke\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.pdb
 C:\Users\mathias\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.exe
 C:\Users\mathias\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.pdb
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\bin\Debug\StegaProject.exe.config
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\bin\Debug\StegaProject.exe
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\bin\Debug\StegaProject.pdb
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.csprojResolveAssemblyReference.cache
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.Properties.Resources.resources
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.csproj.GenerateResource.Cache
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.exe
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.pdb

@@ -30,11 +30,12 @@ namespace StegaProject {
             int decimalValue;
 
             if (Amplitude[0] == '0') {
-                decimalValue = -((int)Math.Pow(2, Amplitude.Length) - (Convert.ToInt32(Amplitude, 2) + 1));
-            } else {
+                decimalValue = -((int) Math.Pow(2, Amplitude.Length) - (Convert.ToInt32(Amplitude, 2) + 1));
+            }
+            else {
                 decimalValue = Convert.ToInt32(Amplitude, 2);
             }
-
+ 
             return decimalValue;
         }
     }
