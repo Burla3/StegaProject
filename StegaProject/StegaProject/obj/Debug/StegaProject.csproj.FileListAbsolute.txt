@@ -1,1 +1,2 @@
 C:\Users\Jens\Documents\GitHub\StegaProject\StegaProject\StegaProject\bin\Debug\StegaProject.exe.config
+C:\Users\mathias\StegaProject\StegaProject\StegaProject\bin\Debug\StegaProject.exe.config
