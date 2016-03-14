@@ -7,32 +7,32 @@ using System.Threading.Tasks;
 namespace StegaProject {
     class EntropyComponent {
 
-        public EntropyComponent(string huffmanCode, string huffmanLeafCode, string valueCode) {
-            HuffmannCode = huffmanCode;
-            HuffmanLeafCode = huffmanLeafCode;
-            ValueCode = valueCode;
+        public EntropyComponent(string huffmanTreePath, string huffmanLeafHexValue, string amplitude) {
+            HuffmanTreePath = huffmanTreePath;
+            HuffmanLeafHexValue = huffmanLeafHexValue;
+            Amplitude = amplitude;
         }
 
-        public string HuffmannCode { get; private set; }
+        public string HuffmanTreePath { get; private set; }
 
-        public string ValueCode { get; private set; }
+        public string Amplitude { get; private set; }
 
-        public string HuffmanLeafCode { get; private set; }
+        public string HuffmanLeafHexValue { get; private set; }
 
         public int LSB {
 
-            get { return int.Parse(ValueCode.Substring(ValueCode.Length - 1)); }
+            get { return int.Parse(Amplitude.Substring(Amplitude.Length - 1)); }
 
-            set {  ValueCode = ValueCode.Remove(ValueCode.Length - 1, 1) + value.ToString(); }
+            set {  Amplitude = Amplitude.Remove(Amplitude.Length - 1, 1) + value.ToString(); }
         }
 
         public int getDecimalValue() {
             int decimalValue;
 
-            if (ValueCode[0] == '0') {
-                decimalValue = -((int)Math.Pow(2, ValueCode.Length) - (Convert.ToInt32(ValueCode, 2) + 1));
+            if (Amplitude[0] == '0') {
+                decimalValue = -((int)Math.Pow(2, Amplitude.Length) - (Convert.ToInt32(Amplitude, 2) + 1));
             } else {
-                decimalValue = Convert.ToInt32(ValueCode, 2);
+                decimalValue = Convert.ToInt32(Amplitude, 2);
             }
 
             return decimalValue;

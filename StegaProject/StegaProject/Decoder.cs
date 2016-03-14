@@ -20,11 +20,10 @@ namespace StegaProject {
 
         public Decoder(string path) {
             CurrentIndex = 0;
-            JPEGExtractor extractor = new JPEGExtractor();
+            JPEGExtractor extractor = new JPEGExtractor(path);
             HuffmanTrees = new List<HuffmanTree>();
             EntropyComponents = new List<EntropyComponent>();
 
-            extractor.LoadImage(path);
             buildHuffmanTrees(extractor);
             getBinaryData(extractor);
 
@@ -64,6 +63,7 @@ namespace StegaProject {
                 //Lum
                 for (int i = 0; i < 1; i++) {
                     decodeValue(HuffmanTable.LumDC);
+                    Console.WriteLine($"DC done");
                     for (int j = 0; j < 63; j++) {
                        hitEOB = decodeValue(HuffmanTable.LumAC);
                         if (hitEOB) {
@@ -76,6 +76,7 @@ namespace StegaProject {
                 //Crom
                 for (int i = 0; i < 2; i++) {
                     decodeValue(HuffmanTable.ChromDC);
+                    Console.WriteLine($"DC done");
                     for (int j = 0; j < 63; j++) {
                         hitEOB = decodeValue(HuffmanTable.ChromAC);
                         if (hitEOB) {
@@ -85,27 +86,27 @@ namespace StegaProject {
                     }
                 }
                 //TEMP FIX!! NEED REWORK!! 
-               // break;
+               break;
             } 
         }
 
         private bool decodeValue(HuffmanTable table) {
-            string huffmanLeafValue;
-            string value;
-            string currentHuffmanCode;
+            string huffmanLeafHexValue;
+            string amplitude;
+            string huffmanTreePath;
 
-            getLeafValue(out currentHuffmanCode, out huffmanLeafValue, table);
+            getHuffmanLeafHexValue(out huffmanTreePath, out huffmanLeafHexValue, table);
 
-            if (huffmanLeafValue != "00") {
-                value = getValueCode(huffmanLeafValue);
+            if (huffmanLeafHexValue != "00" || (table == HuffmanTable.ChromDC || table == HuffmanTable.LumDC)) {
+                amplitude = getAmplitude(huffmanLeafHexValue);
 
-                if (value == "") {
-                    value = "0";
+                if (amplitude == "") {
+                    amplitude = "0";
                 }
 
-                Console.WriteLine($"Huffman {huffmanLeafValue} TreePath {value}");
+                Console.WriteLine($"Huffman {huffmanLeafHexValue} TreePath {amplitude}");
 
-                EntropyComponents.Add(new EntropyComponent(currentHuffmanCode, huffmanLeafValue, value));
+                EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, amplitude));
             } else {
                 return true;
             }
@@ -113,22 +114,22 @@ namespace StegaProject {
             return false;
         }
 
-        private string getLeafValue(out string currentHuffmanCode, out string huffmanLeafValue, HuffmanTable table) {
-            currentHuffmanCode = "";
-            huffmanLeafValue = "";
+        private string getHuffmanLeafHexValue(out string currentHuffmanTreePath, out string huffmanLeafHexValue, HuffmanTable table) {
+            currentHuffmanTreePath = "";
+            huffmanLeafHexValue = "";
 
-            while (huffmanLeafValue == "") {
-                currentHuffmanCode += BinaryData[CurrentIndex];
-                huffmanLeafValue = HuffmanTrees[(int)table].SearchFor(currentHuffmanCode);
+            while (huffmanLeafHexValue == "") {
+                currentHuffmanTreePath += BinaryData[CurrentIndex];
+                huffmanLeafHexValue = HuffmanTrees[(int)table].SearchFor(currentHuffmanTreePath);
                 CurrentIndex++;
             }
 
-            return huffmanLeafValue;
+            return huffmanLeafHexValue;
         }
 
-        private string getValueCode(string huffmanLeafValue) {
+        private string getAmplitude(string huffmanLeafHexValue) {
             string value = "";
-            int lenght = Convert.ToInt32(huffmanLeafValue[1].ToString(), 10);
+            int lenght = Convert.ToInt32(huffmanLeafHexValue[1].ToString(), 10);
 
             for (int i = 0; i < lenght; i++, CurrentIndex++) {
                 value += BinaryData[CurrentIndex];
