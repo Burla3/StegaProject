@@ -32,7 +32,6 @@ namespace StegaProject {
             int index = startIndex;
 
             while ( index != -1 && index < imageBytes.Length - 1 && RemoveDashes( BitConverter.ToString( imageBytes, index, MARKERLENGTH ) ) != marker ) {
-
                 index++;
             }
 
@@ -63,7 +62,7 @@ namespace StegaProject {
             int dataStart = FindDataStart( marker );
 
             while ( index != -1 ) {
-                list.Add( RemoveDashes( BitConverter.ToString( imageBytes, dataStart, fieldLength ) ) );
+                list.Add( ReplaceDashesWithSpaces( BitConverter.ToString( imageBytes, dataStart, fieldLength ) ) );
 
                 index++;
 
@@ -80,6 +79,16 @@ namespace StegaProject {
 
             return int.Parse( RemoveDashes( BitConverter.ToString( imageBytes, index + MARKERLENGTH, MARKERLENGTH ) ),
                 NumberStyles.HexNumber ) - FIELDLENGTHOFFSET;
+        }
+
+        private bool DataContainsThumbnail() {
+            int firstIndex = FindMarker( SOSMARKER );
+
+            if ( FindMarker( SOSMARKER, firstIndex + MARKERLENGTH ) != -1 ) {
+                return true;
+            }
+
+            return false;
         }
 
         public void LoadImage( string path ) {
@@ -113,9 +122,14 @@ namespace StegaProject {
             return GetFieldData( SOSMARKER );
         }
 
-        public string GetCompressedData() {
+        public string GetCompressedImageData() {
             int index = FindMarker( SOSMARKER );
-            int SOSFieldLength = GetFieldLength( SOSMARKER );
+
+            if ( DataContainsThumbnail() ) {
+                index = FindMarker( SOSMARKER, index + MARKERLENGTH );
+            }
+
+            int SOSFieldLength = GetFieldLength( SOSMARKER, index );
 
             int startIndex = index + MARKERANDFIELDLENGTHOFFSET + SOSFieldLength;
 
