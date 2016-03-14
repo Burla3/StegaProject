@@ -92,9 +92,13 @@ namespace StegaProject {
         }
 
         public void LoadImage( string path ) {
-            Image image = Image.FromFile( path );
-            image.Save( memoryStream, ImageFormat.Jpeg );
-            imageBytes = memoryStream.ToArray();
+            try {
+                Image image = Image.FromFile( path );
+                image.Save( memoryStream, ImageFormat.Jpeg );
+                imageBytes = memoryStream.ToArray();
+            } catch ( FileNotFoundException e ) {
+                Console.WriteLine( "Tried to access file: " + e.FileName + ". However, I was not able to find it. Exception message: " + e.Message );
+            }
         }
 
         public void SaveImage( MemoryStream imageStream, string path ) {
