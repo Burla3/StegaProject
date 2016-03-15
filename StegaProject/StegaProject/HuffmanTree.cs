@@ -90,8 +90,8 @@ namespace HuffmanTreeBuilder
             int valueIndex = 17;
             for (int i = 0; i < 17; i++) {
 
-                int dhtamount;
-                int.TryParse(dhtsplit[i], out dhtamount);
+                int dhtamount = Convert.ToInt32(dhtsplit[i].ToString(), 16);
+
                 LinkedList<string> valuesList = new LinkedList<string> { };
                 for (int d = valueIndex; d < valueIndex + dhtamount; d++) {
                     valuesList.AddLast(dhtsplit[d]);
@@ -99,7 +99,7 @@ namespace HuffmanTreeBuilder
                 valueIndex += dhtamount;
                 HuffmanTree.DHTLists.AddLast(valuesList);
             }
-
+            
         }
 
         public LinkedList<string> levelList() {
