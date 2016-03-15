@@ -9,8 +9,14 @@ namespace StegaProject {
 
         public void changeLSB(List<EntropyComponent> entropyComponents) {
             foreach (EntropyComponent entropyComponent in entropyComponents) {
-                entropyComponent.LSB = 0;
+                change(entropyComponent);
             }
+        }
+
+        public void change(EntropyComponent entropyComponent) {
+            string temp = entropyComponent.Amplitude;
+            temp = "1" + temp.Remove(0, 1);
+            entropyComponent.Amplitude = temp;
         }
     }
 }

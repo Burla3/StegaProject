@@ -15,7 +15,7 @@ namespace StegaProject {
 
         public string HuffmanTreePath { get; private set; }
 
-        public string Amplitude { get; private set; }
+        public string Amplitude { get; set; }
 
         public string HuffmanLeafHexValue { get; private set; }
 

@@ -8,7 +8,7 @@ namespace StegaProject {
         public Form1() {
             InitializeComponent();
 
-            JPEGExtractor extractor = new JPEGExtractor(@"C:\Users\Nyggi\Desktop\IMG_20160309_160619.jpg");
+            JPEGExtractor extractor = new JPEGExtractor(@"C:\Users\Mikke\Desktop\IMG_20160309_160619.jpg");
             Steganogrify steganogrify = new Steganogrify();
 
             Decoder decoder = new Decoder(extractor);
@@ -29,7 +29,7 @@ namespace StegaProject {
             
             //Console.WriteLine(decoder.getReEncodedRawHexData());
 
-            extractor.SaveImage(decoder.getReEncodedRawHexData(), @"C:\Users\Nyggi\Desktop\small-test.jpg");
+            extractor.SaveImage(decoder.getReEncodedRawHexData(), @"C:\Users\Mikke\Desktop\small-test.jpg");
         }
     }
 }

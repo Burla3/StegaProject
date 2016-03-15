@@ -209,7 +209,7 @@ namespace StegaProject {
 
             int endIndex = index;
 
-            return ReplaceDashesWithSpaces(BitConverter.ToString(imageBytes, startIndex, endIndex - startIndex));
+            return RemoveDashes(BitConverter.ToString(imageBytes, startIndex, endIndex - startIndex));
         }
 
         /// <summary>
