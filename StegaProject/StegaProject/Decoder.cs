@@ -23,25 +23,14 @@ namespace StegaProject {
             CurrentIndex = 0;
             HuffmanTrees = new List<HuffmanTree>();
             EntropyComponents = new List<EntropyComponent>();
-            Console.WriteLine("Hallo");
-            buildHuffmanTrees(extractor);
-            //foreach (HuffmanTree huffmanTree in HuffmanTrees) {
-            //    Console.WriteLine("New Tree");
-            //    huffmanTree.printAddresses();
-            //}
-            Console.WriteLine("Hallo, its me");
-            getBinaryData(extractor);
-            Console.WriteLine("SHUT UP!");
 
+            buildHuffmanTrees(extractor);
+            getBinaryData(extractor);
             decodeBinaryData();
         }
 
         private void buildHuffmanTrees(JPEGExtractor extractor) {
             List<string> DHT = extractor.GetDHT();
-
-            //foreach (string table in DHT) {
-            //    Console.WriteLine(table);
-            //}
 
             foreach (string table in DHT) {
                 HuffmanTrees.Add(new HuffmanTree(table));
@@ -51,27 +40,13 @@ namespace StegaProject {
         private void getBinaryData(JPEGExtractor extractor) {
             string data = extractor.GetCompressedImageData();
 
-            Console.WriteLine("JAJAJAA " + data.Length);
-            //Console.WriteLine(data);
-
             StringBuilder sBuilder = new StringBuilder();
 
-           
-
             for (int i = 0; i < data.Length; i++) {
-                if (i % 1000 == 0) {
-                    Console.WriteLine(i);
-                }
-                if (data[i] != ' ') {
-                    sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));
-                    //BinaryData += Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0');
-                }
+                sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));            
             }
 
             BinaryData = sBuilder.ToString();
-
-            //Console.WriteLine(data);
-            //Console.WriteLine(BinaryData);
         }
 
         private void decodeBinaryData() {
@@ -80,14 +55,11 @@ namespace StegaProject {
             while (CurrentIndex < BinaryData.Length) {
 
                 //Lum manuel supsampling for now change i
-                for (int i = 0; i < 4; i++) {
-                    Console.WriteLine("Lum");
+                for (int i = 0; i < 1; i++) {
                     decodeValue(HuffmanTable.LumDC);
-                    Console.WriteLine($"DC done");
                     for (int j = 0; j < 63; j++) {
                        hitEOB = decodeValue(HuffmanTable.LumAC);
                         if (hitEOB) {
-                            Console.WriteLine($"AC done");
                             break;
                         }  
                     }
@@ -95,13 +67,10 @@ namespace StegaProject {
 
                 //Crom manuel supsampling for now change i
                 for (int i = 0; i < 2; i++) {
-                    Console.WriteLine("Chrom");
                     decodeValue(HuffmanTable.ChromDC);
-                    Console.WriteLine($"DC done");
                     for (int j = 0; j < 63; j++) {
                         hitEOB = decodeValue(HuffmanTable.ChromAC);
                         if (hitEOB) {
-                            Console.WriteLine($"AC done");
                             break;
                         }
                     }
@@ -127,11 +96,8 @@ namespace StegaProject {
                     amplitude = "0";
                 }
 
-                //Console.WriteLine($"Huffman {huffmanLeafHexValue} TreePath {amplitude}");
-
                 EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, amplitude));
             } else {
-                Console.WriteLine("EOB");
                 EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, "EOB"));
                 return true;
             }
@@ -171,27 +137,22 @@ namespace StegaProject {
 
             foreach (EntropyComponent entropyComponent in EntropyComponents) {
                 if (entropyComponent.HuffmanLeafHexValue == "00" || entropyComponent.Amplitude == "EOB") {
-                    //BinaryData += entropyComponent.HuffmanTreePath;
                     sBuilder.Append(entropyComponent.HuffmanTreePath);
                 } else {
-                    //BinaryData += entropyComponent.HuffmanTreePath + entropyComponent.Amplitude;
                     sBuilder.Append(entropyComponent.HuffmanTreePath + entropyComponent.Amplitude);
                 }   
             }
-
-            while (BinaryData.Length % 8 != 0) {
-                //BinaryData += "1";
+            
+            while (sBuilder.Length % 8 != 0) {
                 sBuilder.Append("1");
             }
 
             BinaryData = sBuilder.ToString();
 
-
             sBuilder.Clear();
 
             for (int i = 0; i < BinaryData.Length; i += 4) {
                 sBuilder.Append(Convert.ToString(Convert.ToInt32(BinaryData.Substring(i, 4), 2), 16));
-                //HexData += Convert.ToString(Convert.ToInt32(BinaryData.Substring(i, 4), 2), 16);
             }
 
             HexData = sBuilder.ToString();
