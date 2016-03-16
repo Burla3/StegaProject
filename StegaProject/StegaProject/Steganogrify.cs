@@ -15,7 +15,14 @@ namespace StegaProject {
 
         public void change(EntropyComponent entropyComponent) {
             string temp = entropyComponent.Amplitude;
-            temp = "1" + temp.Remove(0, 1);
+            char MSB = temp[0];
+            if (MSB == '1') {
+                temp = "0" + temp.Remove(0, 1);
+            }
+            else {
+                temp = "1" + temp.Remove(0, 1);
+            }
+
             entropyComponent.Amplitude = temp;
         }
     }
