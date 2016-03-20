@@ -21,7 +21,7 @@ namespace StegaProject {
 
         public int LSB {
 
-            get { return int.Parse(Amplitude.Substring(Amplitude.Length - 1)); }
+            get { return this.Amplitude == "EOB" ? -1 : int.Parse(Amplitude.Substring(Amplitude.Length - 1)) ; }
 
             set {  Amplitude = Amplitude.Remove(Amplitude.Length - 1, 1) + value.ToString(); }
         }
@@ -29,13 +29,19 @@ namespace StegaProject {
         public int getDecimalValue() {
             int decimalValue;
 
-            if (Amplitude[0] == '0') {
-                decimalValue = -((int) Math.Pow(2, Amplitude.Length) - (Convert.ToInt32(Amplitude, 2) + 1));
+            if (Amplitude != "EOB") {
+
+                if (Amplitude[0] == '0') {
+                    decimalValue = -((int) Math.Pow(2, Amplitude.Length) - (Convert.ToInt32(Amplitude, 2) + 1));
+                }
+                else {
+                    decimalValue = Convert.ToInt32(Amplitude, 2);
+                }
             }
             else {
-                decimalValue = Convert.ToInt32(Amplitude, 2);
+                decimalValue = -9999;
             }
- 
+
             return decimalValue;
         }
     }

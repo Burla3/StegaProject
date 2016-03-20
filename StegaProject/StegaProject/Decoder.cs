@@ -18,6 +18,7 @@ namespace StegaProject {
 
         private string BinaryData { get; set; }
         private int CurrentIndex { get; set; }
+        private int Count { get; set; }
 
         public Decoder(JPEGExtractor extractor) {
             CurrentIndex = 0;
@@ -40,10 +41,28 @@ namespace StegaProject {
         private void getBinaryData(JPEGExtractor extractor) {
             string data = extractor.GetCompressedImageData();
 
+            Console.WriteLine("Extrac " + data);
+
             StringBuilder sBuilder = new StringBuilder();
 
+            string temp = "";
+            string old = "";
+
+            
             for (int i = 0; i < data.Length; i++) {
-                sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));            
+                sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));
+                //Testing
+                //if (i == 678 || i == 679) {
+                //    i++;
+                //}
+                //else {
+                //    sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));
+                //}
+                //temp = Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0');
+                //if (temp == "0000" && old == "0000" && i % 2 == 1) {
+                //    Console.WriteLine($"FUCK!!! {i}");
+                //}
+                //old = temp;
             }
 
             BinaryData = sBuilder.ToString();
@@ -52,24 +71,28 @@ namespace StegaProject {
         private void decodeBinaryData() {
             bool hitEOB;
 
+            Count = 0;
+
             while (CurrentIndex < BinaryData.Length) {
+
+                Console.WriteLine($"MCU {Count}");
 
                 //Lum manuel supsampling for now change i
                 for (int i = 0; i < 1; i++) {
-                    decodeValue(HuffmanTable.LumDC);
+                    decodeHuffmanHexValue(HuffmanTable.LumDC);
                     for (int j = 0; j < 63; j++) {
-                       hitEOB = decodeValue(HuffmanTable.LumAC);
-                        if (hitEOB) {
-                            break;
+                       hitEOB = decodeHuffmanHexValue(HuffmanTable.LumAC);
+                       if (hitEOB) {
+                           break;
                         }  
                     }
                 }
 
                 //Crom manuel supsampling for now change i
                 for (int i = 0; i < 2; i++) {
-                    decodeValue(HuffmanTable.ChromDC);
+                    decodeHuffmanHexValue(HuffmanTable.ChromDC);
                     for (int j = 0; j < 63; j++) {
-                        hitEOB = decodeValue(HuffmanTable.ChromAC);
+                        hitEOB = decodeHuffmanHexValue(HuffmanTable.ChromAC);
                         if (hitEOB) {
                             break;
                         }
@@ -79,10 +102,11 @@ namespace StegaProject {
                     Console.WriteLine("Only trash left");
                     break;
                 }
+                Count++;
             } 
         }
 
-        private bool decodeValue(HuffmanTable table) {
+        private bool decodeHuffmanHexValue(HuffmanTable table) {
             string huffmanLeafHexValue;
             string amplitude;
             string huffmanTreePath;
@@ -109,10 +133,14 @@ namespace StegaProject {
             currentHuffmanTreePath = "";
             huffmanLeafHexValue = "";
 
-            while (huffmanLeafHexValue == "") {
+            //Burde ikke være her
+            int localCount = 0;
+
+            while (huffmanLeafHexValue == "" && localCount < 16) {
                 currentHuffmanTreePath += BinaryData[CurrentIndex];
                 huffmanLeafHexValue = HuffmanTrees[(int)table].SearchFor(currentHuffmanTreePath);
                 CurrentIndex++;
+                localCount++;
             }
 
             return huffmanLeafHexValue;
@@ -157,7 +185,9 @@ namespace StegaProject {
 
             HexData = sBuilder.ToString();
 
-            return HexData.ToUpper();
+            Console.WriteLine("Output " + HexData.ToUpper());
+
+            return HexData;
         }
     }
 }
