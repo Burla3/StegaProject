@@ -23,7 +23,7 @@ namespace StegaProject {
 
             get { return this.Amplitude == "EOB" ? -1 : int.Parse(Amplitude.Substring(Amplitude.Length - 1)) ; }
 
-            set {  Amplitude = Amplitude.Remove(Amplitude.Length - 1, 1) + value.ToString(); }
+            set {  Amplitude = Amplitude == "EOB" ? "EOB" : Amplitude.Remove(Amplitude.Length - 1, 1) + value.ToString(); }
         }
 
         public int getDecimalValue() {

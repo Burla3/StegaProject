@@ -41,13 +41,7 @@ namespace StegaProject {
         private void getBinaryData(JPEGExtractor extractor) {
             string data = extractor.GetCompressedImageData();
 
-            Console.WriteLine("Extrac " + data);
-
             StringBuilder sBuilder = new StringBuilder();
-
-            string temp = "";
-            string old = "";
-
             
             for (int i = 0; i < data.Length; i++) {
                 sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));
@@ -58,11 +52,6 @@ namespace StegaProject {
                 //else {
                 //    sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));
                 //}
-                //temp = Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0');
-                //if (temp == "0000" && old == "0000" && i % 2 == 1) {
-                //    Console.WriteLine($"FUCK!!! {i}");
-                //}
-                //old = temp;
             }
 
             BinaryData = sBuilder.ToString();
@@ -133,7 +122,7 @@ namespace StegaProject {
             currentHuffmanTreePath = "";
             huffmanLeafHexValue = "";
 
-            //Burde ikke være her
+            //LocalCount skal måske laves om
             int localCount = 0;
 
             while (huffmanLeafHexValue == "" && localCount < 16) {
@@ -184,8 +173,6 @@ namespace StegaProject {
             }
 
             HexData = sBuilder.ToString();
-
-            Console.WriteLine("Output " + HexData.ToUpper());
 
             return HexData;
         }

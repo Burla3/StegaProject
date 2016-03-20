@@ -37,26 +37,26 @@ namespace StegaProject {
             CurrentIndex = 0;
             string decodedMsg = "";
             int[] msgInBits = new int[HammingMatrixRows];
-            int[] currentLSBs = new int[HammingMatrixCols];
+            LSBComponent[] currentLSBs;
 
 
             while (CurrentIndex < entropyComponents.Count - HammingMatrixCols) {
                 currentLSBs = getNextLSBs(entropyComponents);
 
-                Console.Write("currentLSBs ");
-                foreach (int currentLSB in currentLSBs) {
-                    Console.Write(currentLSB + " ");
-                }
-                Console.WriteLine();
+                //Console.Write("currentLSBs ");
+                //foreach (LSBComponent currentLSB in currentLSBs) {
+                //    Console.Write(currentLSB.LSB + " ");
+                //}
+                //Console.WriteLine();
 
                 msgInBits = matrixVectorProduct(currentLSBs);
 
-                Console.Write("AfterMatrix ");
+                //Console.Write("AfterMatrix ");
                 foreach (int bit in msgInBits) {
                     decodedMsg += bit.ToString();
-                    Console.Write(bit);
+                    //Console.Write(bit);
                 }
-                Console.WriteLine();
+                //Console.WriteLine();
             }
 
             return decodedMsg;
@@ -66,7 +66,7 @@ namespace StegaProject {
 
             CurrentIndex = 0;
 
-            int[] currentLSBs = new int[HammingMatrixCols];
+            LSBComponent[] currentLSBs;
 
             while (CurrentIndex < entropyComponents.Count - HammingMatrixCols) {
 
@@ -74,15 +74,15 @@ namespace StegaProject {
 
                 currentLSBs = checkLSB(currentLSBs);
 
-                for (int overrideIndex = CurrentIndex - HammingMatrixCols, j = 0; overrideIndex < CurrentIndex; overrideIndex++, j++) {
-                    entropyComponents[overrideIndex].LSB = currentLSBs[j];
+                foreach (LSBComponent currentLSB in currentLSBs) {
+                    entropyComponents[currentLSB.IndexInEntropyComponents].LSB = currentLSB.LSB;
                 }
             }
         }
 
-        private int[] getNextLSBs(List<EntropyComponent> entropyComponents) {
+        private LSBComponent[] getNextLSBs(List<EntropyComponent> entropyComponents) {
             int temp;
-            int[] LSBs = new int[HammingMatrixCols];
+            LSBComponent[] LSBs = new LSBComponent[HammingMatrixCols];
 
             for (int i = 0; i < HammingMatrixCols; i++) {
                 temp = -1;
@@ -91,25 +91,27 @@ namespace StegaProject {
                     temp = entropyComponents[CurrentIndex].LSB;
                     CurrentIndex++;
                 }
-                LSBs[i] = temp;
+                LSBs[i] = new LSBComponent(temp, CurrentIndex - 1);
+                //Console.WriteLine($"LSB {LSBs[i].LSB} with {LSBs[i].IndexInEntropyComponents} passed ");
+
             }
             return LSBs;
         }
 
-        private int[] checkLSB(int[] currentLSBs) {
+        private LSBComponent[] checkLSB(LSBComponent[] currentLSBs) {
 
-            Console.WriteLine($"LSBs before change");
-            foreach (int currentLSB in currentLSBs) {
-                Console.Write(currentLSB + " ");
-            }
-            Console.WriteLine();
+            //Console.WriteLine($"LSBs before change");
+            //foreach (LSBComponent currentLSB in currentLSBs) {
+            //    Console.Write(currentLSB.LSB + " ");
+            //}
+            //Console.WriteLine();
 
             int[] matrixVectorProductResult = new int[HammingMatrixRows];
             int[] difference = new int[HammingMatrixRows];
 
             matrixVectorProductResult = matrixVectorProduct(currentLSBs);
 
-            //Console.WriteLine("Result after H3 " + result[0] + " " + result[1] + " " + result[2]);
+            //Console.WriteLine("Result after H3 " + matrixVectorProductResult[0] + " " + matrixVectorProductResult[1] + " " + matrixVectorProductResult[2]);
             //Console.WriteLine("MsgToIncode " + MsgToEncodeInBits[0] + " " + MsgToEncodeInBits[1] + " " + MsgToEncodeInBits[2]);
             
 
@@ -117,32 +119,35 @@ namespace StegaProject {
                 difference[i] = (matrixVectorProductResult[i] + MsgToEncodeInBits[i]) % 2;
             }
 
-            Console.WriteLine("Difference " + difference[0] + " " + difference[1] + " " + difference[2]);
+            //Console.WriteLine("Difference " + difference[0] + " " + difference[1] + " " + difference[2]);
 
             currentLSBs = changeLSB(difference, currentLSBs);
 
-            Console.WriteLine($"LSBs after change");
-            foreach (int currentLSB in currentLSBs) {
-                Console.Write(currentLSB + " ");
-            }
-            Console.WriteLine();
+            //Console.WriteLine($"LSBs after change");
+            //foreach (LSBComponent currentLSB in currentLSBs) {
+            //    Console.Write(currentLSB.LSB + " ");
+            //}
+            //Console.WriteLine();
+            //Console.WriteLine();
 
             return currentLSBs;
         }
 
-        private int[] matrixVectorProduct(int[] currentLSBs) {
-            int temp = 0;
+        private int[] matrixVectorProduct(LSBComponent[] currentLSBs) {
+            int temp;
             int[] result = new int[HammingMatrixRows];
+
             for (int row = 0; row < HammingMatrixRows; row++) {
+                temp = 0;
                 for (int col = 0; col < HammingMatrixCols; col++) {
-                    temp = HammingMatrix[row, col] * currentLSBs[row];
+                    temp += HammingMatrix[row, col] * currentLSBs[col].LSB;
                 }
                 result[row] = temp % 2;
             }
             return result;
         }
 
-        private int[] changeLSB(int[] difference, int[] currentLSBs) {
+        private LSBComponent[] changeLSB(int[] difference, LSBComponent[] currentLSBs) {
             bool haveToChangeLSB = false;
             int index = 0;
 
@@ -169,7 +174,7 @@ namespace StegaProject {
                     }
                 }
 
-                currentLSBs[bitToChange] = currentLSBs[bitToChange] == 0 ? 1 : 0;
+                currentLSBs[bitToChange].LSB = currentLSBs[bitToChange].LSB == 0 ? 1 : 0;
             }
             return currentLSBs;
         }
