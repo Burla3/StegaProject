@@ -35,7 +35,7 @@ namespace HuffmanTreeBuilder
             }
         }
 
-        public String SearchFor(String binAddr, int index) {
+        public string SearchFor(string binAddr, int index) {
             //Takes a binary sequence by string and seraches for a value. 
             //If no leaf is found at that address, an empty string is returned.
             if (this.leaf) {
@@ -45,7 +45,7 @@ namespace HuffmanTreeBuilder
                     return "";
                 }
             } else {
-                String result;
+                string result;
 
                 if (binAddr.Length <= index) {
                     result = "";
@@ -79,7 +79,7 @@ namespace HuffmanTreeBuilder
         public void populateLists(string DHT) {
 
             HuffmanTree.DHTLists = new LinkedList<LinkedList<string>> { };
-            String[] dhtsplit = DHT.Split(' ');
+            string[] dhtsplit = DHT.Split(' ');
             int valueIndex = 17;
             for (int i = 0; i < 17; i++) {
 
