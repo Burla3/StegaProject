@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 using HuffmanTreeBuilder;
 
@@ -9,6 +10,10 @@ namespace StegaProject {
             InitializeComponent();
 
             JPEGExtractor extractor = new JPEGExtractor(@"C:\Users\Nyggi\Desktop\rainbow-1024p-q60-optimized.jpg");
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             Decoder decoder = new Decoder(extractor);
 
             Steganogrify steganogrify =
@@ -27,6 +32,9 @@ namespace StegaProject {
             decoder = new Decoder(extractor);
             Console.WriteLine("Extracting hidden msg");
             Console.WriteLine("Msg hidden in JPEG: " + steganogrify.decodeMsg(decoder.EntropyComponents));
+
+            sw.Stop();
+            Console.WriteLine($"Program completed in: {sw.Elapsed}");
         }
     }
 }

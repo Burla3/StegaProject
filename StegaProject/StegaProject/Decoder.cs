@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HuffmanTreeBuilder;
+using System.Diagnostics;
 
 namespace StegaProject {
     class Decoder {
@@ -42,7 +43,7 @@ namespace StegaProject {
             string data = extractor.GetCompressedImageData();
 
             StringBuilder sBuilder = new StringBuilder();
-            
+
             for (int i = 0; i < data.Length; i++) {
                 sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));
             }
@@ -58,7 +59,7 @@ namespace StegaProject {
                 if (Count % 1000 == 0) {
                     Console.WriteLine($"MCU {Count}");
                 }
-                
+
                 //Lum manuel supsampling for now change i
                 for (int i = 0; i < 1; i++) {
                     decodeHuffmanHexValue(HuffmanTable.LumDC, true);
@@ -66,7 +67,7 @@ namespace StegaProject {
                        hitEOB = decodeHuffmanHexValue(HuffmanTable.LumAC, false);
                        if (hitEOB) {
                            break;
-                        }  
+                        }
                     }
                 }
 
@@ -85,7 +86,7 @@ namespace StegaProject {
                     break;
                 }
                 Count++;
-            } 
+            }
         }
 
         private bool decodeHuffmanHexValue(HuffmanTable table, bool isDC) {
@@ -148,9 +149,9 @@ namespace StegaProject {
                     sBuilder.Append(entropyComponent.HuffmanTreePath);
                 } else {
                     sBuilder.Append(entropyComponent.HuffmanTreePath + entropyComponent.Amplitude);
-                }   
+                }
             }
-            
+
             while (sBuilder.Length % 8 != 0) {
                 sBuilder.Append("1");
             }

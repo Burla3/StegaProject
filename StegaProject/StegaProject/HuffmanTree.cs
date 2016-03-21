@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HuffmanTreeBuilder
 {
@@ -16,8 +14,6 @@ namespace HuffmanTreeBuilder
 
         public HuffmanTree left;
         public HuffmanTree right;
-
-        
 
         public HuffmanTree(string DHT) : this("", DHT) {
 
@@ -39,7 +35,7 @@ namespace HuffmanTreeBuilder
             }
         }
 
-        public String SearchFor(String binAddr) {
+        public String SearchFor(String binAddr, int index) {
             //Takes a binary sequence by string and seraches for a value. 
             //If no leaf is found at that address, an empty string is returned.
             if (this.leaf) {
@@ -50,19 +46,16 @@ namespace HuffmanTreeBuilder
                 }
             } else {
                 String result;
-                if (this.left == null) {
+
+                if (binAddr.Length <= index) {
                     result = "";
+                } else if (binAddr[index] == '0') { // Go left 
+                    result = this.left.SearchFor(binAddr, index + 1);
                 } else {
-                    result = this.left.SearchFor(binAddr);
-                }
-                if (this.right == null) {
-                    result += "";
-                } else {
-                    result += this.right.SearchFor(binAddr);
+                    result = this.right.SearchFor(binAddr, index + 1);
                 }
                 return result;
             }
-
         }
         
         public void printAddresses() {
