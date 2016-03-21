@@ -17,12 +17,29 @@ namespace StegaProject {
 
         private int CurrentIndex { get; set; }
 
+        private int Index { get; set; }
+
         public Steganogrify(string msgToEncode) {
             Console.WriteLine("Msg to be encoded " + msgToEncode);
-            MsgToEncodeInBits = new int[msgToEncode.Length];
-            for (int i = 0; i < msgToEncode.Length; i++) {
-                MsgToEncodeInBits[i] = Convert.ToInt32(msgToEncode[i].ToString(), 2);
+            MsgToEncodeInBits = new int[msgToEncode.Length * 8];
+            string tempString;
+            int index = 0;
+            for (int i = 0; i < msgToEncode.Length - 8; i++) {
+                tempString = Convert.ToString(msgToEncode[i], 2).PadLeft(8, '0');
+                for (int j = 0; j < tempString.Length; j++) {
+                    MsgToEncodeInBits[index++] = Convert.ToInt32(tempString[j].ToString(), 2);
+                }                
             }
+            string msgToPrint = "";
+            index = 0;
+            for (int k = 0; k < msgToEncode.Length - 8; k++) {
+                tempString = "";
+                for (int l = 0; l < 8; l++) {
+                    tempString += MsgToEncodeInBits[index++].ToString();
+                }
+                msgToPrint += Convert.ToChar(Convert.ToInt32(tempString, 2));
+            }
+            Console.WriteLine(msgToPrint);
 
             HammingMatrix = new int[3, 7] {
                 {1, 0, 0, 1, 1, 0, 1},
@@ -32,11 +49,12 @@ namespace StegaProject {
 
             HammingMatrixCols = HammingMatrix.Length / (HammingMatrix.Rank + 1);
             HammingMatrixRows = HammingMatrix.Rank + 1;
+            Index = 0;
         }
 
         public string decodeMsg(List<EntropyComponent> entropyComponents) {
             CurrentIndex = 0;
-            string decodedMsg = "";
+            string msgAsString = "";
             int[] msgInBits = new int[HammingMatrixRows];
             LSBComponent[] currentLSBs;
 
@@ -44,21 +62,23 @@ namespace StegaProject {
             while (CurrentIndex < entropyComponents.Count - HammingMatrixCols) {
                 currentLSBs = getNextLSBs(entropyComponents);
 
-                //Console.Write("currentLSBs ");
-                //foreach (LSBComponent currentLSB in currentLSBs) {
-                //    Console.Write(currentLSB.LSB + " ");
-                //}
-                //Console.WriteLine();
-
                 msgInBits = matrixVectorProduct(currentLSBs);
 
-                //Console.Write("AfterMatrix ");
                 foreach (int bit in msgInBits) {
-                    decodedMsg += bit.ToString();
-                    //Console.Write(bit);
-                }
-                //Console.WriteLine();
+                    msgAsString += bit.ToString();
+                }                
             }
+
+            string decodedMsg = "";
+            string temp = "";
+            for (int i = 1; i < msgAsString.Length + 1; i++) {
+                temp += msgAsString[i - 1].ToString();
+                if (i % 8 == 0 && i != 0) {
+                    decodedMsg += Convert.ToChar(Convert.ToInt32(temp, 2));
+                    temp = "";
+                }
+            }
+            
 
             return decodedMsg;
         }
@@ -93,43 +113,22 @@ namespace StegaProject {
                     CurrentIndex++;
                 }
                 LSBs[i] = new LSBComponent(temp, CurrentIndex - 1);
-                //Console.WriteLine($"LSB {LSBs[i].LSB} with {LSBs[i].IndexInEntropyComponents} passed ");
-
             }
             return LSBs;
         }
 
         private LSBComponent[] checkLSB(LSBComponent[] currentLSBs) {
 
-            //Console.WriteLine($"LSBs before change");
-            //foreach (LSBComponent currentLSB in currentLSBs) {
-            //    Console.Write(currentLSB.LSB + " ");
-            //}
-            //Console.WriteLine();
-
             int[] matrixVectorProductResult = new int[HammingMatrixRows];
             int[] difference = new int[HammingMatrixRows];
 
             matrixVectorProductResult = matrixVectorProduct(currentLSBs);
 
-            //Console.WriteLine("Result after H3 " + matrixVectorProductResult[0] + " " + matrixVectorProductResult[1] + " " + matrixVectorProductResult[2]);
-            //Console.WriteLine("MsgToIncode " + MsgToEncodeInBits[0] + " " + MsgToEncodeInBits[1] + " " + MsgToEncodeInBits[2]);
-            
-
             for (int i = 0; i < HammingMatrixRows; i++) {
-                difference[i] = (matrixVectorProductResult[i] + MsgToEncodeInBits[i]) % 2;
+                difference[i] = (matrixVectorProductResult[i] + MsgToEncodeInBits[Index++]) % 2;
             }
 
-            //Console.WriteLine("Difference " + difference[0] + " " + difference[1] + " " + difference[2]);
-
             currentLSBs = changeLSB(difference, currentLSBs);
-
-            //Console.WriteLine($"LSBs after change");
-            //foreach (LSBComponent currentLSB in currentLSBs) {
-            //    Console.Write(currentLSB.LSB + " ");
-            //}
-            //Console.WriteLine();
-            //Console.WriteLine();
 
             return currentLSBs;
         }

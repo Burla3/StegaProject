@@ -45,13 +45,6 @@ namespace StegaProject {
             
             for (int i = 0; i < data.Length; i++) {
                 sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));
-                //Testing
-                //if (i == 678 || i == 679) {
-                //    i++;
-                //}
-                //else {
-                //    sBuilder.Append(Convert.ToString(Convert.ToInt32(data[i].ToString(), 16), 2).PadLeft(4, '0'));
-                //}
             }
 
             BinaryData = sBuilder.ToString();
@@ -59,12 +52,12 @@ namespace StegaProject {
 
         private void decodeBinaryData() {
             bool hitEOB;
-
             Count = 0;
 
             while (CurrentIndex < BinaryData.Length) {
-
-                Console.WriteLine($"MCU {Count}");
+                if (Count % 1000 == 0) {
+                    Console.WriteLine($"MCU {Count}");
+                }
                 
                 //Lum manuel supsampling for now change i
                 for (int i = 0; i < 1; i++) {
@@ -127,11 +120,10 @@ namespace StegaProject {
 
             while (huffmanLeafHexValue == "" && localCount < 16) {
                 currentHuffmanTreePath += BinaryData[CurrentIndex];
-                huffmanLeafHexValue = HuffmanTrees[(int)table].SearchFor(currentHuffmanTreePath);
+                huffmanLeafHexValue = HuffmanTrees[(int)table].SearchFor(currentHuffmanTreePath, 0);
                 CurrentIndex++;
                 localCount++;
             }
-
             return huffmanLeafHexValue;
         }
 
@@ -142,7 +134,6 @@ namespace StegaProject {
             for (int i = 0; i < lenght; i++, CurrentIndex++) {
                 value += BinaryData[CurrentIndex];
             }
-
             return value;
         }
 

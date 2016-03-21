@@ -22,7 +22,6 @@ namespace StegaProject {
         public string HuffmanLeafHexValue { get; private set; }
 
         public int LSB {
-
             get { return this.Amplitude == "EOB" ? -1 : int.Parse(Amplitude.Substring(Amplitude.Length - 1)) ; }
 
             set {  Amplitude = Amplitude == "EOB" ? "EOB" : Amplitude.Remove(Amplitude.Length - 1, 1) + value.ToString(); }
@@ -32,7 +31,6 @@ namespace StegaProject {
             int decimalValue;
 
             if (Amplitude != "EOB") {
-
                 if (Amplitude[0] == '0') {
                     decimalValue = -((int) Math.Pow(2, Amplitude.Length) - (Convert.ToInt32(Amplitude, 2) + 1));
                 }
