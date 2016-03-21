@@ -14,8 +14,8 @@ namespace StegaProject {
             LumDC = 0, LumAC = 1, ChromDC = 2, ChromAC = 3
         }
 
-        private List<HuffmanTree> HuffmanTrees { get; set; }
-        public List<EntropyComponent> EntropyComponents { get; private set; }
+        private List<HuffmanTree> HuffmanTrees { get; }
+        public List<EntropyComponent> EntropyComponents { get; }
 
         private string BinaryData { get; set; }
         private int CurrentIndex { get; set; }

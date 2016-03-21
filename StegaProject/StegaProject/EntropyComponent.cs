@@ -13,13 +13,13 @@ namespace StegaProject {
             IsDC = isDc;
         }
 
-        public bool IsDC { get; private set; }
+        public bool IsDC { get; }
 
-        public string HuffmanTreePath { get; private set; }
+        public string HuffmanTreePath { get; }
 
         public string Amplitude { get; set; }
 
-        public string HuffmanLeafHexValue { get; private set; }
+        public string HuffmanLeafHexValue { get; }
 
         public int LSB {
             get { return this.Amplitude == "EOB" ? -1 : int.Parse(Amplitude.Substring(Amplitude.Length - 1)) ; }

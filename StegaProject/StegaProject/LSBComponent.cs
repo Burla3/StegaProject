@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StegaProject {
     class LSBComponent {
-        public int IndexInEntropyComponents { get; private set; }
+        public int IndexInEntropyComponents { get; }
         public int LSB { get; set; }
 
         public LSBComponent(int lsb, int index) {

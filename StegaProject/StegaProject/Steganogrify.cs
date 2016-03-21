@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace StegaProject {
     class Steganogrify {
 
-        private HammingMatrix HammingMatrix { get; set; }
+        private HammingMatrix HammingMatrix { get; }
 
-        private int[] MsgToEncodeInBits { get; set; }
+        private int[] MsgToEncodeInBits { get; }
 
         private int CurrentIndex { get; set; }
 

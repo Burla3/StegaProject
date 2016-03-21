@@ -10,8 +10,8 @@ namespace StegaProject {
     /// </summary>
     class HammingMatrix {
         public int[,] Matrix { get; private set; }
-        public int Cols { get; private set; }
-        public int Rows { get; private set; }
+        public int Cols { get; }
+        public int Rows { get; }
 
         /// <summary>
         /// Generate HammingMatrix based on the input size.
