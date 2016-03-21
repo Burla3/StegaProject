@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 namespace StegaProject {
     class Steganogrify {
 
-        private int[,] HammingMatrix { get; set; }
+        private HammingMatrix HammingMatrix { get; set; }
 
         private int[] MsgToEncodeInBits { get; set; }
-    
-        private int HammingMatrixCols { get; set; }
-    
-        private int HammingMatrixRows { get; set; }
 
         private int CurrentIndex { get; set; }
 
@@ -30,36 +26,19 @@ namespace StegaProject {
                     MsgToEncodeInBits[index++] = Convert.ToInt32(tempString[j].ToString(), 2);
                 }                
             }
-            string msgToPrint = "";
-            index = 0;
-            for (int k = 0; k < msgToEncode.Length - 8; k++) {
-                tempString = "";
-                for (int l = 0; l < 8; l++) {
-                    tempString += MsgToEncodeInBits[index++].ToString();
-                }
-                msgToPrint += Convert.ToChar(Convert.ToInt32(tempString, 2));
-            }
-            Console.WriteLine(msgToPrint);
+                    
+            HammingMatrix = new HammingMatrix(3);
 
-            HammingMatrix = new int[3, 7] {
-                {1, 0, 0, 1, 1, 0, 1},
-                {0, 1, 0, 1, 0, 1, 1},
-                {0, 0, 1, 0, 1, 1, 1}
-            };
-
-            HammingMatrixCols = HammingMatrix.Length / (HammingMatrix.Rank + 1);
-            HammingMatrixRows = HammingMatrix.Rank + 1;
             Index = 0;
         }
 
         public string decodeMsg(List<EntropyComponent> entropyComponents) {
             CurrentIndex = 0;
             string msgAsString = "";
-            int[] msgInBits = new int[HammingMatrixRows];
+            int[] msgInBits = new int[HammingMatrix.Rows];
             LSBComponent[] currentLSBs;
 
-
-            while (CurrentIndex < entropyComponents.Count - HammingMatrixCols) {
+            while (CurrentIndex < entropyComponents.Count - HammingMatrix.Cols) {
                 currentLSBs = getNextLSBs(entropyComponents);
 
                 msgInBits = matrixVectorProduct(currentLSBs);
@@ -70,26 +49,22 @@ namespace StegaProject {
             }
 
             string decodedMsg = "";
-            string temp = "";
+            string bitsToConvertToChar = "";
             for (int i = 1; i < msgAsString.Length + 1; i++) {
-                temp += msgAsString[i - 1].ToString();
+                bitsToConvertToChar += msgAsString[i - 1].ToString();
                 if (i % 8 == 0 && i != 0) {
-                    decodedMsg += Convert.ToChar(Convert.ToInt32(temp, 2));
-                    temp = "";
+                    decodedMsg += Convert.ToChar(Convert.ToInt32(bitsToConvertToChar, 2));
+                    bitsToConvertToChar = "";
                 }
-            }
-            
-
+            }           
             return decodedMsg;
         }
 
         public void encodeMsg(List<EntropyComponent> entropyComponents) {
-
+            LSBComponent[] currentLSBs;
             CurrentIndex = 0;
 
-            LSBComponent[] currentLSBs;
-
-            while (CurrentIndex < entropyComponents.Count - HammingMatrixCols) {
+            while (CurrentIndex < entropyComponents.Count - HammingMatrix.Cols) {
 
                 currentLSBs = getNextLSBs(entropyComponents);
 
@@ -102,29 +77,28 @@ namespace StegaProject {
         }
 
         private LSBComponent[] getNextLSBs(List<EntropyComponent> entropyComponents) {
-            int temp;
-            LSBComponent[] LSBs = new LSBComponent[HammingMatrixCols];
+            LSBComponent[] LSBs = new LSBComponent[HammingMatrix.Cols];
+            int LSB;
 
-            for (int i = 0; i < HammingMatrixCols; i++) {
-                temp = -1;
+            for (int i = 0; i < HammingMatrix.Cols; i++) {
+                LSB = -1;
 
-                while (temp == -1) {
-                    temp = entropyComponents[CurrentIndex].IsDC ? -1 : entropyComponents[CurrentIndex].LSB;
+                while (LSB == -1) {
+                    LSB = entropyComponents[CurrentIndex].IsDC ? -1 : entropyComponents[CurrentIndex].LSB;
                     CurrentIndex++;
                 }
-                LSBs[i] = new LSBComponent(temp, CurrentIndex - 1);
+                LSBs[i] = new LSBComponent(LSB, CurrentIndex - 1);
             }
             return LSBs;
         }
 
         private LSBComponent[] checkLSB(LSBComponent[] currentLSBs) {
-
-            int[] matrixVectorProductResult = new int[HammingMatrixRows];
-            int[] difference = new int[HammingMatrixRows];
+            int[] matrixVectorProductResult = new int[HammingMatrix.Rows];
+            int[] difference = new int[HammingMatrix.Rows];
 
             matrixVectorProductResult = matrixVectorProduct(currentLSBs);
 
-            for (int i = 0; i < HammingMatrixRows; i++) {
+            for (int i = 0; i < HammingMatrix.Rows; i++) {
                 difference[i] = (matrixVectorProductResult[i] + MsgToEncodeInBits[Index++]) % 2;
             }
 
@@ -134,15 +108,15 @@ namespace StegaProject {
         }
 
         private int[] matrixVectorProduct(LSBComponent[] currentLSBs) {
-            int temp;
-            int[] result = new int[HammingMatrixRows];
+            int rowResult;
+            int[] result = new int[HammingMatrix.Rows];
 
-            for (int row = 0; row < HammingMatrixRows; row++) {
-                temp = 0;
-                for (int col = 0; col < HammingMatrixCols; col++) {
-                    temp += HammingMatrix[row, col] * currentLSBs[col].LSB;
+            for (int row = 0; row < HammingMatrix.Rows; row++) {
+                rowResult = 0;
+                for (int col = 0; col < HammingMatrix.Cols; col++) {
+                    rowResult += HammingMatrix.Matrix[row, col] * currentLSBs[col].LSB;
                 }
-                result[row] = temp % 2;
+                result[row] = rowResult % 2;
             }
             return result;
         }
@@ -151,19 +125,18 @@ namespace StegaProject {
             bool haveToChangeLSB = false;
             int index = 0;
 
-            while (index < HammingMatrixRows && !haveToChangeLSB) {
+            while (index < HammingMatrix.Rows && !haveToChangeLSB) {
                 haveToChangeLSB = difference[index] != 0;
                 index++;
             }
 
             if (haveToChangeLSB) {
-
                 bool realCol = false;
                 int bitToChange = -1;
 
-                for (int col = 0; col < HammingMatrixCols; col++) {
-                    for (int row = 0; row < HammingMatrixRows; row++) {
-                        realCol = HammingMatrix[row, col] == difference[row];
+                for (int col = 0; col < HammingMatrix.Cols; col++) {
+                    for (int row = 0; row < HammingMatrix.Rows; row++) {
+                        realCol = HammingMatrix.Matrix[row, col] == difference[row];
                         if (!realCol) {
                             break;
                         }
@@ -173,7 +146,6 @@ namespace StegaProject {
                         break;
                     }
                 }
-
                 currentLSBs[bitToChange].LSB = currentLSBs[bitToChange].LSB == 0 ? 1 : 0;
             }
             return currentLSBs;

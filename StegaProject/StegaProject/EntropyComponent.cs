@@ -27,6 +27,9 @@ namespace StegaProject {
             set {  Amplitude = Amplitude == "EOB" ? "EOB" : Amplitude.Remove(Amplitude.Length - 1, 1) + value.ToString(); }
         }
 
+        /// <summary>
+        /// Gets Decimal Value.
+        /// </summary>
         public int getDecimalValue() {
             int decimalValue;
 

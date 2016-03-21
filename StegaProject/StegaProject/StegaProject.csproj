@@ -54,6 +54,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="HammingMatrix.cs" />
     <Compile Include="HuffmanTree.cs" />
     <Compile Include="JPEGExtractor.cs" />
     <Compile Include="LSBComponent.cs" />

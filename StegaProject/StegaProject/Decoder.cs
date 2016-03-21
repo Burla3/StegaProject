@@ -21,6 +21,10 @@ namespace StegaProject {
         private int CurrentIndex { get; set; }
         private int Count { get; set; }
 
+        /// <summary>
+        /// Decodes compressed image data.
+        /// </summary>
+        /// <para name="extractor"></para>
         public Decoder(JPEGExtractor extractor) {
             CurrentIndex = 0;
             HuffmanTrees = new List<HuffmanTree>();
@@ -138,6 +142,10 @@ namespace StegaProject {
             return value;
         }
 
+        /// <summary>
+        /// Gets encoded compressed image data, which can be injected into a new JPEG.
+        /// </summary>
+        /// <returns>encoded compressed image data.</returns>
         public string getReEncodedRawHexData() {
             BinaryData = "";
             string HexData = "";

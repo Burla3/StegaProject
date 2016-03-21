@@ -122,9 +122,9 @@ namespace StegaProject {
 
 
         /// <summary>
-        /// Saves a MemoryStream as a JPEG image file at the given path.
+        /// Injects hexdata into a JPEG memorystream and saves it at the given path.
         /// </summary>
-        /// <param name="imageStream">MemoryStream containing JPEG image bytes.</param>
+        /// <param name="hexDataToInject">String containing hex data to inject.</param>
         /// <param name="path">Path to the image file you wish to save.</param>
         public void SaveImage(string hexDataToInject, string path) {
             int index = FindMarker(SOSMARKER);
