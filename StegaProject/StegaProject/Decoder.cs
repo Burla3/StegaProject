@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HuffmanTreeBuilder;
+using System.Diagnostics;
 
 namespace StegaProject {
     class Decoder {
@@ -64,8 +65,10 @@ namespace StegaProject {
 
             while (CurrentIndex < BinaryData.Length) {
 
-                Console.WriteLine($"MCU {Count}");
-                
+                if (Count % 1 == 1000) {
+                    Console.WriteLine($"MCU {Count}");
+                }
+                 
                 //Lum manuel supsampling for now change i
                 for (int i = 0; i < 1; i++) {
                     decodeHuffmanHexValue(HuffmanTable.LumDC, true);
@@ -92,7 +95,7 @@ namespace StegaProject {
                     break;
                 }
                 Count++;
-            } 
+            }
         }
 
         private bool decodeHuffmanHexValue(HuffmanTable table, bool isDC) {
@@ -127,7 +130,9 @@ namespace StegaProject {
 
             while (huffmanLeafHexValue == "" && localCount < 16) {
                 currentHuffmanTreePath += BinaryData[CurrentIndex];
-                huffmanLeafHexValue = HuffmanTrees[(int)table].SearchFor(currentHuffmanTreePath);
+
+                huffmanLeafHexValue = HuffmanTrees[(int)table].SearchFor(currentHuffmanTreePath, 0);
+
                 CurrentIndex++;
                 localCount++;
             }
