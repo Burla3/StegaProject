@@ -18,6 +18,7 @@ namespace StegaProject {
         private int CurrentIndex { get; set; }
 
         public Steganogrify(string msgToEncode) {
+            Console.WriteLine("Msg to be encoded " + msgToEncode);
             MsgToEncodeInBits = new int[msgToEncode.Length];
             for (int i = 0; i < msgToEncode.Length; i++) {
                 MsgToEncodeInBits[i] = Convert.ToInt32(msgToEncode[i].ToString(), 2);
@@ -88,7 +89,7 @@ namespace StegaProject {
                 temp = -1;
 
                 while (temp == -1) {
-                    temp = entropyComponents[CurrentIndex].LSB;
+                    temp = entropyComponents[CurrentIndex].IsDC ? -1 : entropyComponents[CurrentIndex].LSB;
                     CurrentIndex++;
                 }
                 LSBs[i] = new LSBComponent(temp, CurrentIndex - 1);

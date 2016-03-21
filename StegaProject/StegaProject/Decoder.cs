@@ -65,12 +65,12 @@ namespace StegaProject {
             while (CurrentIndex < BinaryData.Length) {
 
                 Console.WriteLine($"MCU {Count}");
-
+                
                 //Lum manuel supsampling for now change i
                 for (int i = 0; i < 1; i++) {
-                    decodeHuffmanHexValue(HuffmanTable.LumDC);
+                    decodeHuffmanHexValue(HuffmanTable.LumDC, true);
                     for (int j = 0; j < 63; j++) {
-                       hitEOB = decodeHuffmanHexValue(HuffmanTable.LumAC);
+                       hitEOB = decodeHuffmanHexValue(HuffmanTable.LumAC, false);
                        if (hitEOB) {
                            break;
                         }  
@@ -79,9 +79,9 @@ namespace StegaProject {
 
                 //Crom manuel supsampling for now change i
                 for (int i = 0; i < 2; i++) {
-                    decodeHuffmanHexValue(HuffmanTable.ChromDC);
+                    decodeHuffmanHexValue(HuffmanTable.ChromDC, true);
                     for (int j = 0; j < 63; j++) {
-                        hitEOB = decodeHuffmanHexValue(HuffmanTable.ChromAC);
+                        hitEOB = decodeHuffmanHexValue(HuffmanTable.ChromAC, false);
                         if (hitEOB) {
                             break;
                         }
@@ -95,7 +95,7 @@ namespace StegaProject {
             } 
         }
 
-        private bool decodeHuffmanHexValue(HuffmanTable table) {
+        private bool decodeHuffmanHexValue(HuffmanTable table, bool isDC) {
             string huffmanLeafHexValue;
             string amplitude;
             string huffmanTreePath;
@@ -109,9 +109,9 @@ namespace StegaProject {
                     amplitude = "0";
                 }
 
-                EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, amplitude));
+                EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, amplitude, isDC));
             } else {
-                EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, "EOB"));
+                EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, "EOB", isDC));
                 return true;
             }
 

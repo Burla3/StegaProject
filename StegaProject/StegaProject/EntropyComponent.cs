@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace StegaProject {
     class EntropyComponent {
-
-        public EntropyComponent(string huffmanTreePath, string huffmanLeafHexValue, string amplitude) {
+        public EntropyComponent(string huffmanTreePath, string huffmanLeafHexValue, string amplitude, bool isDc) {
             HuffmanTreePath = huffmanTreePath;
             HuffmanLeafHexValue = huffmanLeafHexValue;
             Amplitude = amplitude;
+            IsDC = isDc;
         }
+
+        public bool IsDC { get; private set; }
 
         public string HuffmanTreePath { get; private set; }
 
