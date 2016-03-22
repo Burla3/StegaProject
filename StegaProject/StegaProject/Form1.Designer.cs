@@ -29,7 +29,9 @@
             this.ExtractMessage = new System.Windows.Forms.Button();
             this.TextBox = new System.Windows.Forms.RichTextBox();
             this.LengthOfText = new System.Windows.Forms.TextBox();
+            this.SizeOfHammingMatrix = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.LoadedPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SizeOfHammingMatrix)).BeginInit();
             this.SuspendLayout();
             // 
             // LoadImage
@@ -83,15 +85,39 @@
             // 
             this.LengthOfText.Location = new System.Drawing.Point(568, 208);
             this.LengthOfText.Name = "LengthOfText";
+            this.LengthOfText.ReadOnly = true;
             this.LengthOfText.Size = new System.Drawing.Size(47, 20);
             this.LengthOfText.TabIndex = 5;
-            this.LengthOfText.ReadOnly = true;
+            // 
+            // SizeOfHammingMatrix
+            // 
+            this.SizeOfHammingMatrix.Location = new System.Drawing.Point(315, 289);
+            this.SizeOfHammingMatrix.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.SizeOfHammingMatrix.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.SizeOfHammingMatrix.Name = "SizeOfHammingMatrix";
+            this.SizeOfHammingMatrix.Size = new System.Drawing.Size(30, 20);
+            this.SizeOfHammingMatrix.TabIndex = 6;
+            this.SizeOfHammingMatrix.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.SizeOfHammingMatrix.ValueChanged += new System.EventHandler(this.SizeOfHammingMatrix_ValueChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(680, 350);
+            this.Controls.Add(this.SizeOfHammingMatrix);
             this.Controls.Add(this.LengthOfText);
             this.Controls.Add(this.TextBox);
             this.Controls.Add(this.ExtractMessage);
@@ -101,6 +127,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.LoadedPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SizeOfHammingMatrix)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -114,6 +141,7 @@
         private System.Windows.Forms.Button ExtractMessage;
         private System.Windows.Forms.RichTextBox TextBox;
         private System.Windows.Forms.TextBox LengthOfText;
+        private System.Windows.Forms.NumericUpDown SizeOfHammingMatrix;
     }
 }
 

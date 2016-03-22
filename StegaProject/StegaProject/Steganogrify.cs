@@ -12,7 +12,7 @@ namespace StegaProject {
 
         private int Index { get; set; }
 
-        public Steganogrify(string msgToEncode) {
+        public Steganogrify(string msgToEncode, int sizeOfMatrix) {
             MsgToEncodeInBits = new int[msgToEncode.Length * 8];
             string tempString;
             int index = 0;
@@ -24,7 +24,7 @@ namespace StegaProject {
                 }                
             }
                     
-            HammingMatrix = new HammingMatrix(3);
+            HammingMatrix = new HammingMatrix(sizeOfMatrix);
 
             Index = 0;
         }

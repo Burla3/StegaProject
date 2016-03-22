@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace StegaProject {
     /// <summary>
     /// This class holds a HammingMatrix.
@@ -13,19 +15,23 @@ namespace StegaProject {
         /// </summary>
         /// <param name="size">Size of the HammingMatrix.</param>
         public HammingMatrix(int size) {
-            
-            generateMatrix(size);
 
-            Cols = Matrix.Length / (Matrix.Rank + 1);
-            Rows = Matrix.Rank + 1;
+            Cols = (int)Math.Pow(2, size);
+            Rows = size;
+
+            generateMatrix();
         }
 
-        private void generateMatrix(int size) {
-            Matrix = new int[3, 7] {
-                {1, 0, 0, 1, 1, 0, 1},
-                {0, 1, 0, 1, 0, 1, 1},
-                {0, 0, 1, 0, 1, 1, 1}
-            };
+        private void generateMatrix() {
+            Matrix = new int[Rows, Cols];
+            string temp;
+
+            for (int cols = 0; cols < Cols; cols++) {
+                temp = Convert.ToString(cols, 2).PadLeft(Rows, '0');
+                for (int rows = 0; rows < Rows; rows++) {
+                    Matrix[rows, cols] = int.Parse(temp[rows].ToString());
+                }
+            }
         }
     }
 }
