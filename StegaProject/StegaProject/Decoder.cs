@@ -156,7 +156,7 @@ namespace StegaProject {
             StringBuilder sBuilder = new StringBuilder();
 
             foreach (EntropyComponent entropyComponent in EntropyComponents) {
-                if ((entropyComponent is DCComponent && entropyComponent.Amplitude == "0") || entropyComponent is EOBComponent) {
+                if ((entropyComponent is DCComponent && entropyComponent.HuffmanLeafHexValue == "00") || entropyComponent is EOBComponent) {
                     sBuilder.Append(entropyComponent.HuffmanTreePath);
                 } else {
                     sBuilder.Append(entropyComponent.HuffmanTreePath + entropyComponent.Amplitude);

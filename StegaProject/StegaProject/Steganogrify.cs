@@ -67,10 +67,8 @@ namespace StegaProject {
 
                 currentLSBs = checkLSB(currentLSBs);
 
-                foreach (LSBComponent currentLSB in currentLSBs) {
-                    if (entropyComponents[currentLSB.IndexInEntropyComponents] is ACComponent) {
-                        ((ACComponent)entropyComponents[currentLSB.IndexInEntropyComponents]).LSB = currentLSB.LSB;
-                    }                  
+                foreach (LSBComponent currentLSB in currentLSBs) {                 
+                    ((ACComponent)entropyComponents[currentLSB.IndexInEntropyComponents]).LSB = currentLSB.LSB;                  
                 }
             }
         }
@@ -98,9 +96,9 @@ namespace StegaProject {
 
             matrixVectorProductResult = matrixVectorProduct(currentLSBs);
 
-            if (MsgToEncodeInBits.Length < Index + 3) {
-                Index = 0;
-            }
+            //if (MsgToEncodeInBits.Length < Index + 3) {
+            //    Index = 0;
+            //}
 
             for (int i = 0; i < HammingMatrix.Rows; i++) {
                 difference[i] = (matrixVectorProductResult[i] + MsgToEncodeInBits[Index++]) % 2;
