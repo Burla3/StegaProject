@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StegaProject {
-    class EntropyComponent {
+    public class EntropyComponent {
         public EntropyComponent(string huffmanTreePath, string huffmanLeafHexValue, string amplitude, bool isDc) {
             HuffmanTreePath = huffmanTreePath;
             HuffmanLeafHexValue = huffmanLeafHexValue;

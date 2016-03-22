@@ -10,7 +10,7 @@ namespace StegaProject {
     /// <summary>
     /// This class holds methods to extract different markers' data, compressed image data and all data from JPEG files.
     /// </summary>
-    class JPEGExtractor {
+    public class JPEGExtractor {
         private const byte MARKERLENGTH = 2;
         private const byte FIELDLENGTHOFFSET = 2;
         private const byte MARKERANDFIELDLENGTHOFFSET = 4;

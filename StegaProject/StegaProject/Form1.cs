@@ -1,40 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 using HuffmanTreeBuilder;
 
 namespace StegaProject {
     public partial class Form1 : Form {
+        public JPEGExtractor Extractor { get; set; }
+        public Decoder Decoder { get; set; }
+        public string LoadPath { get; set; }
+
         public Form1() {
             InitializeComponent();
 
-            JPEGExtractor extractor = new JPEGExtractor(@"C:\Users\Nyggi\Desktop\rainbow-1024p-q60-optimized.jpg");
+            EncodeMsg.Enabled = false;
+            ExtractMessage.Enabled = false;
+            TextBox.Enabled = false;
+            LengthOfText.Enabled = false;
+        }
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+        private void LoadImage_Click(object sender, EventArgs e) {
+            OpenFileDialog file = new OpenFileDialog();
+            file.InitialDirectory = "c:\\";
+            file.Filter = "jpg files (*.jpg)|*.jpg|All files (*.*)|*.";
+            file.FilterIndex = 1;
+            file.RestoreDirectory = true;
+            TextBox.Clear();
 
-            Decoder decoder = new Decoder(extractor);
+            if (file.ShowDialog() == DialogResult.OK) {
+                LoadPath = file.FileName;
 
-            Steganogrify steganogrify =
-                new Steganogrify(
-                    "Steganography is the practice of concealing a file, message, image, or video within another file, message, image, or video. The word steganography combines the Greek words steganos, meaning covered, concealed, or protected, and graphein meaning writing. The first recorded use of the term was in 1499 by Johannes Trithemius in his Steganographia, a treatise on cryptography and steganography, disguised as a book on magic. Generally, the hidden messages appear to be (or be part of) something else: images, articles, shopping lists, or some other cover text. For example, the hidden message may be in invisible ink between the visible lines of a private letter. Some implementations of steganography that lack a shared secret are forms of security through obscurity, whereas key-dependent steganographic schemes adhere to Kerckhoffs's principle. The advantage of steganography over cryptography alone is that the intended secret message does not attract attention to itself as an object of scrutiny. Plainly visible encrypted messagesno matter how unbreakablearouse interest, and may in themselves be incriminating in countries where encryption is illegal. Thus, whereas cryptography is the practice of protecting the contents of a message alone, steganography is concerned with concealing the fact that a secret message is being sent, as well as concealing the contents of the message. Steganography includes the concealment of information within computer files. In digital steganography, electronic communications may include steganographic coding inside of a transport layer, such as a document file, image file, program or protocol. Media files are ideal for steganographic transmission because of their large size. For example, a sender might start with an innocuous image file and adjust the color of every 100th pixel to correspond to a letter in the alphabet, a change so subtle that someone not specifically looking for it is unlikely to notice it. Steganography is the practice of concealing a file, message, image, or video within another file, message, image, or video. The word steganography combines the Greek words steganos, meaning covered, concealed, or protected, and graphein meaning writing. The first recorded use of the term was in 1499 by Johannes Trithemius in his Steganographia, a treatise on cryptography and steganography, disguised as a book on magic. Generally, the hidden messages appear to be (or be part of) something else: images, articles, shopping lists, or some other cover text. For example, the hidden message may be in invisible ink between the visible lines of a private letter. Some implementations of steganography that lack a shared secret are forms of security through obscurity, whereas key-dependent steganographic schemes adhere to Kerckhoffs's principle. The advantage of steganography over cryptography alone is that the intended secret message does not attract attention to itself as an object of scrutiny. Plainly visible encrypted messagesno matter how unbreakablearouse interest, and may in themselves be incriminating in countries where encryption is illegal. Thus, whereas cryptography is the practice of protecting the contents of a message alone, steganography is concerned with concealing the fact that a secret message is being sent, as well as concealing the contents of the message. Steganography includes the concealment of information within computer files. In digital steganography, electronic communications may include steganographic coding inside of a transport layer, such as a document file, image file, program or protocol. Media files are ideal for steganographic transmission because of their large size. For example, a sender might start with an innocuous image file and adjust the color of every 100th pixel to correspond to a letter in the alphabet, a change so subtle that someone not specifically looking for it is unlikely to notice it.");
+                LoadedPicture.ImageLocation = LoadPath;
+                LoadedPicture.SizeMode = PictureBoxSizeMode.StretchImage;
+                LoadedPicture.Load();
+                Extractor = new JPEGExtractor(LoadPath);
+                Decoder = new Decoder(Extractor);
 
-            Console.WriteLine("Encoding msg");
-            steganogrify.encodeMsg(decoder.EntropyComponents);
+                TextBox.ReadOnly = false;
+                EncodeMsg.Enabled = true;
+                ExtractMessage.Enabled = true;
+                TextBox.Enabled = true;
+                LengthOfText.Enabled = true;
+                Console.WriteLine(Decoder.ComponentsThatCanBeChanged);
+                LengthOfText.Text = (Decoder.ComponentsThatCanBeChanged / 8 * 3 / 8).ToString();
+            }                      
+        }
 
-            extractor.SaveImage(decoder.getReEncodedRawHexData(), @"C:\Users\Nyggi\Desktop\hamming-1024p-test.jpg");
+        private void EncodeMsg_Click(object sender, EventArgs e) {
+            //"Steganography is the practice of concealing a file, message, image, or video within another file, message, image, or video. The word steganography combines the Greek words steganos, meaning covered, concealed, or protected, and graphein meaning writing. The first recorded use of the term was in 1499 by Johannes Trithemius in his Steganographia, a treatise on cryptography and steganography, disguised as a book on magic. Generally, the hidden messages appear to be (or be part of) something else: images, articles, shopping lists, or some other cover text. For example, the hidden message may be in invisible ink between the visible lines of a private letter. Some implementations of steganography that lack a shared secret are forms of security through obscurity, whereas key-dependent steganographic schemes adhere to Kerckhoffs's principle. The advantage of steganography over cryptography alone is that the intended secret message does not attract attention to itself as an object of scrutiny. Plainly visible encrypted messagesno matter how unbreakablearouse interest, and may in themselves be incriminating in countries where encryption is illegal. Thus, whereas cryptography is the practice of protecting the contents of a message alone, steganography is concerned with concealing the fact that a secret message is being sent, as well as concealing the contents of the message. Steganography includes the concealment of information within computer files. In digital steganography, electronic communications may include steganographic coding inside of a transport layer, such as a document file, image file, program or protocol. Media files are ideal for steganographic transmission because of their large size. For example, a sender might start with an innocuous image file and adjust the color of every 100th pixel to correspond to a letter in the alphabet, a change so subtle that someone not specifically looking for it is unlikely to notice it. Steganography is the practice of concealing a file, message, image, or video within another file, message, image, or video. The word steganography combines the Greek words steganos, meaning covered, concealed, or protected, and graphein meaning writing. The first recorded use of the term was in 1499 by Johannes Trithemius in his Steganographia, a treatise on cryptography and steganography, disguised as a book on magic. Generally, the hidden messages appear to be (or be part of) something else: images, articles, shopping lists, or some other cover text. For example, the hidden message may be in invisible ink between the visible lines of a private letter. Some implementations of steganography that lack a shared secret are forms of security through obscurity, whereas key-dependent steganographic schemes adhere to Kerckhoffs's principle. The advantage of steganography over cryptography alone is that the intended secret message does not attract attention to itself as an object of scrutiny. Plainly visible encrypted messagesno matter how unbreakablearouse interest, and may in themselves be incriminating in countries where encryption is illegal. Thus, whereas cryptography is the practice of protecting the contents of a message alone, steganography is concerned with concealing the fact that a secret message is being sent, as well as concealing the contents of the message. Steganography includes the concealment of information within computer files. In digital steganography, electronic communications may include steganographic coding inside of a transport layer, such as a document file, image file, program or protocol. Media files are ideal for steganographic transmission because of their large size. For example, a sender might start with an innocuous image file and adjust the color of every 100th pixel to correspond to a letter in the alphabet, a change so subtle that someone not specifically looking for it is unlikely to notice it."   
+            Steganogrify steganogrify = new Steganogrify(TextBox.Text);
 
-            //Decode
-            Console.WriteLine("Decoding newly created JPEG");
-            extractor = new JPEGExtractor(@"C:\Users\Nyggi\Desktop\hamming-1024p-test.jpg");
+            steganogrify.encodeMsg(Decoder.EntropyComponents);
+            Console.WriteLine(Path.GetDirectoryName(LoadPath) + @"\test.jpg");
+            Extractor.SaveImage(Decoder.getReEncodedRawHexData(), Path.GetDirectoryName(LoadPath) + @"\test.jpg");
+            TextBox.ReadOnly = true;
+        }
 
-            decoder = new Decoder(extractor);
+        private void ExtractMessage_Click(object sender, EventArgs e) {
+            Steganogrify steganogrify = new Steganogrify("");
+
             Console.WriteLine("Extracting hidden msg");
-            Console.WriteLine("Msg hidden in JPEG: " + steganogrify.decodeMsg(decoder.EntropyComponents));
-
-            sw.Stop();
-            Console.WriteLine($"Program completed in: {sw.Elapsed}");
+            TextBox.Text = steganogrify.decodeMsg(Decoder.EntropyComponents, Decoder.ComponentsThatCanBeChanged);
+            //Console.WriteLine("Msg hidden in JPEG: " + steganogrify.decodeMsg(Decoder.EntropyComponents));
         }
     }
 }

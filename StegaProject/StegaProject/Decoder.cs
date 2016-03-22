@@ -8,7 +8,7 @@ using HuffmanTreeBuilder;
 using System.Diagnostics;
 
 namespace StegaProject {
-    class Decoder {
+    public class Decoder {
 
         enum HuffmanTable {
             LumDC = 0, LumAC = 1, ChromDC = 2, ChromAC = 3
@@ -19,7 +19,7 @@ namespace StegaProject {
 
         private string BinaryData { get; set; }
         private int CurrentIndex { get; set; }
-        private int Count { get; set; }
+        public int ComponentsThatCanBeChanged { get; set; }
 
         /// <summary>
         /// Decodes compressed image data.
@@ -33,6 +33,7 @@ namespace StegaProject {
             buildHuffmanTrees(extractor);
             getBinaryData(extractor);
             decodeBinaryData();
+            ComponentsThatCanBeChanged = countValuesThatCanBeChanged();
         }
 
         private void buildHuffmanTrees(JPEGExtractor extractor) {
@@ -57,11 +58,11 @@ namespace StegaProject {
 
         private void decodeBinaryData() {
             bool hitEOB;
-            Count = 0;
+            int count = 0;
 
             while (CurrentIndex < BinaryData.Length) {
-                if (Count % 1000 == 0) {
-                    Console.WriteLine($"MCU {Count}");
+                if (count % 1000 == 0) {
+                    Console.WriteLine($"MCU {count}");
                 }
 
                 //Lum manuel supsampling for now change i
@@ -89,7 +90,7 @@ namespace StegaProject {
                     Console.WriteLine("Only trash left");
                     break;
                 }
-                Count++;
+                count++;
             }
         }
 
@@ -175,6 +176,18 @@ namespace StegaProject {
             HexData = sBuilder.ToString();
 
             return HexData;
+        }
+
+        private int countValuesThatCanBeChanged() {
+            int count = 0;
+
+            foreach (EntropyComponent entropyComponent in EntropyComponents) {
+                if (entropyComponent.Amplitude != "EOB" && !entropyComponent.IsDC) {
+                    count++;
+                }
+            }
+
+            return count;
         }
     }
 }

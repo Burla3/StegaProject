@@ -16,10 +16,10 @@ namespace StegaProject {
         private int Index { get; set; }
 
         public Steganogrify(string msgToEncode) {
-            Console.WriteLine("Msg to be encoded " + msgToEncode);
             MsgToEncodeInBits = new int[msgToEncode.Length * 8];
             string tempString;
             int index = 0;
+
             for (int i = 0; i < msgToEncode.Length - 8; i++) {
                 tempString = Convert.ToString(msgToEncode[i], 2).PadLeft(8, '0');
                 for (int j = 0; j < tempString.Length; j++) {
@@ -32,7 +32,7 @@ namespace StegaProject {
             Index = 0;
         }
 
-        public string decodeMsg(List<EntropyComponent> entropyComponents) {
+        public string decodeMsg(List<EntropyComponent> entropyComponents, int componentsThatCanBeChanged) {
             CurrentIndex = 0;
             string msgAsString = "";
             int[] msgInBits = new int[HammingMatrix.Rows];
@@ -83,12 +83,13 @@ namespace StegaProject {
             for (int i = 0; i < HammingMatrix.Cols; i++) {
                 LSB = -1;
 
-                while (LSB == -1) {
+                while (LSB == -1 && CurrentIndex < entropyComponents.Count) {
                     LSB = entropyComponents[CurrentIndex].IsDC ? -1 : entropyComponents[CurrentIndex].LSB;
                     CurrentIndex++;
                 }
                 LSBs[i] = new LSBComponent(LSB, CurrentIndex - 1);
-            }
+            }           
+
             return LSBs;
         }
 
@@ -97,6 +98,10 @@ namespace StegaProject {
             int[] difference = new int[HammingMatrix.Rows];
 
             matrixVectorProductResult = matrixVectorProduct(currentLSBs);
+
+            //if (MsgToEncodeInBits.Length < Index + 3) {
+            //    Index = 0;
+            //}
 
             for (int i = 0; i < HammingMatrix.Rows; i++) {
                 difference[i] = (matrixVectorProductResult[i] + MsgToEncodeInBits[Index++]) % 2;
@@ -146,7 +151,9 @@ namespace StegaProject {
                         break;
                     }
                 }
-                currentLSBs[bitToChange].LSB = currentLSBs[bitToChange].LSB == 0 ? 1 : 0;
+                if (bitToChange != -1) {
+                    currentLSBs[bitToChange].LSB = currentLSBs[bitToChange].LSB == 0 ? 1 : 0;
+                }
             }
             return currentLSBs;
         }

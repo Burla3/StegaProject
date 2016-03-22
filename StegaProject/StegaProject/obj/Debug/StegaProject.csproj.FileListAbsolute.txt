@@ -18,3 +18,4 @@ C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug
 C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.csproj.GenerateResource.Cache
 C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.exe
 C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.pdb
+C:\Users\Nyggi\Documents\GitHub\StegaProject\StegaProject\StegaProject\obj\Debug\StegaProject.Form1.resources
