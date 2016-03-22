@@ -30,6 +30,10 @@
             this.TextBox = new System.Windows.Forms.RichTextBox();
             this.LengthOfText = new System.Windows.Forms.TextBox();
             this.SizeOfHammingMatrix = new System.Windows.Forms.NumericUpDown();
+            this.TextBoxLabel = new System.Windows.Forms.Label();
+            this.PictureBoxLabel = new System.Windows.Forms.Label();
+            this.HammingMatrixSizeLabel = new System.Windows.Forms.Label();
+            this.CharactersLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.LoadedPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SizeOfHammingMatrix)).BeginInit();
             this.SuspendLayout();
@@ -91,7 +95,7 @@
             // 
             // SizeOfHammingMatrix
             // 
-            this.SizeOfHammingMatrix.Location = new System.Drawing.Point(315, 289);
+            this.SizeOfHammingMatrix.Location = new System.Drawing.Point(318, 289);
             this.SizeOfHammingMatrix.Maximum = new decimal(new int[] {
             10,
             0,
@@ -112,11 +116,52 @@
             0});
             this.SizeOfHammingMatrix.ValueChanged += new System.EventHandler(this.SizeOfHammingMatrix_ValueChanged);
             // 
+            // TextBoxLabel
+            // 
+            this.TextBoxLabel.AutoSize = true;
+            this.TextBoxLabel.Location = new System.Drawing.Point(315, 34);
+            this.TextBoxLabel.Name = "TextBoxLabel";
+            this.TextBoxLabel.Size = new System.Drawing.Size(49, 13);
+            this.TextBoxLabel.TabIndex = 7;
+            this.TextBoxLabel.Text = "Text Box";
+            // 
+            // PictureBoxLabel
+            // 
+            this.PictureBoxLabel.AutoSize = true;
+            this.PictureBoxLabel.Location = new System.Drawing.Point(49, 33);
+            this.PictureBoxLabel.Name = "PictureBoxLabel";
+            this.PictureBoxLabel.Size = new System.Drawing.Size(61, 13);
+            this.PictureBoxLabel.TabIndex = 8;
+            this.PictureBoxLabel.Text = "Picture Box";
+            // 
+            // HammingMatrixSizeLabel
+            // 
+            this.HammingMatrixSizeLabel.AutoSize = true;
+            this.HammingMatrixSizeLabel.Location = new System.Drawing.Point(210, 291);
+            this.HammingMatrixSizeLabel.Name = "HammingMatrixSizeLabel";
+            this.HammingMatrixSizeLabel.Size = new System.Drawing.Size(105, 13);
+            this.HammingMatrixSizeLabel.TabIndex = 9;
+            this.HammingMatrixSizeLabel.Text = "Hamming Matrix Size";
+            this.HammingMatrixSizeLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // CharactersLabel
+            // 
+            this.CharactersLabel.AutoSize = true;
+            this.CharactersLabel.Location = new System.Drawing.Point(568, 189);
+            this.CharactersLabel.Name = "CharactersLabel";
+            this.CharactersLabel.Size = new System.Drawing.Size(58, 13);
+            this.CharactersLabel.TabIndex = 10;
+            this.CharactersLabel.Text = "Characters";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(680, 350);
+            this.Controls.Add(this.CharactersLabel);
+            this.Controls.Add(this.HammingMatrixSizeLabel);
+            this.Controls.Add(this.PictureBoxLabel);
+            this.Controls.Add(this.TextBoxLabel);
             this.Controls.Add(this.SizeOfHammingMatrix);
             this.Controls.Add(this.LengthOfText);
             this.Controls.Add(this.TextBox);
@@ -142,6 +187,10 @@
         private System.Windows.Forms.RichTextBox TextBox;
         private System.Windows.Forms.TextBox LengthOfText;
         private System.Windows.Forms.NumericUpDown SizeOfHammingMatrix;
+        private System.Windows.Forms.Label TextBoxLabel;
+        private System.Windows.Forms.Label PictureBoxLabel;
+        private System.Windows.Forms.Label HammingMatrixSizeLabel;
+        private System.Windows.Forms.Label CharactersLabel;
     }
 }
 
