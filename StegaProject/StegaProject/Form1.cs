@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using HuffmanTreeBuilder;
 
 namespace StegaProject {
     public partial class Form1 : Form {
@@ -42,7 +39,6 @@ namespace StegaProject {
                 ExtractMessage.Enabled = true;
                 TextBox.Enabled = true;
                 LengthOfText.Enabled = true;
-                Console.WriteLine(Decoder.ComponentsThatCanBeChanged);
                 LengthOfText.Text = (Decoder.ComponentsThatCanBeChanged / 8 * 3 / 8).ToString();
             }                      
         }

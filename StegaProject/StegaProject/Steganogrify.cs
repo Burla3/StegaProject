@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StegaProject {
     class Steganogrify {
@@ -71,7 +68,9 @@ namespace StegaProject {
                 currentLSBs = checkLSB(currentLSBs);
 
                 foreach (LSBComponent currentLSB in currentLSBs) {
-                    entropyComponents[currentLSB.IndexInEntropyComponents].LSB = currentLSB.LSB;
+                    if (entropyComponents[currentLSB.IndexInEntropyComponents] is ACComponent) {
+                        ((ACComponent)entropyComponents[currentLSB.IndexInEntropyComponents]).LSB = currentLSB.LSB;
+                    }                  
                 }
             }
         }
@@ -84,7 +83,7 @@ namespace StegaProject {
                 LSB = -1;
 
                 while (LSB == -1 && CurrentIndex < entropyComponents.Count) {
-                    LSB = entropyComponents[CurrentIndex].IsDC ? -1 : entropyComponents[CurrentIndex].LSB;
+                    LSB = entropyComponents[CurrentIndex] is ACComponent ? ((ACComponent)entropyComponents[CurrentIndex]).LSB : -1;
                     CurrentIndex++;
                 }
                 LSBs[i] = new LSBComponent(LSB, CurrentIndex - 1);
@@ -99,9 +98,9 @@ namespace StegaProject {
 
             matrixVectorProductResult = matrixVectorProduct(currentLSBs);
 
-            //if (MsgToEncodeInBits.Length < Index + 3) {
-            //    Index = 0;
-            //}
+            if (MsgToEncodeInBits.Length < Index + 3) {
+                Index = 0;
+            }
 
             for (int i = 0; i < HammingMatrix.Rows; i++) {
                 difference[i] = (matrixVectorProductResult[i] + MsgToEncodeInBits[Index++]) % 2;

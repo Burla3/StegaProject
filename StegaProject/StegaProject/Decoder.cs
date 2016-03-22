@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using HuffmanTreeBuilder;
-using System.Diagnostics;
+
 
 namespace StegaProject {
     public class Decoder {
@@ -108,9 +105,13 @@ namespace StegaProject {
                     amplitude = "0";
                 }
 
-                EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, amplitude, isDC));
+                if (isDC) {
+                    EntropyComponents.Add(new DCComponent(huffmanTreePath, huffmanLeafHexValue, amplitude));
+                } else {
+                    EntropyComponents.Add(new ACComponent(huffmanTreePath, huffmanLeafHexValue, amplitude));
+                }
             } else {
-                EntropyComponents.Add(new EntropyComponent(huffmanTreePath, huffmanLeafHexValue, "EOB", isDC));
+                EntropyComponents.Add(new EOBComponent(huffmanTreePath, huffmanLeafHexValue));
                 return true;
             }
 
@@ -130,6 +131,7 @@ namespace StegaProject {
                 CurrentIndex++;
                 localCount++;
             }
+
             return huffmanLeafHexValue;
         }
 
@@ -154,7 +156,7 @@ namespace StegaProject {
             StringBuilder sBuilder = new StringBuilder();
 
             foreach (EntropyComponent entropyComponent in EntropyComponents) {
-                if (entropyComponent.HuffmanLeafHexValue == "00" || entropyComponent.Amplitude == "EOB") {
+                if ((entropyComponent is DCComponent && entropyComponent.Amplitude == "0") || entropyComponent is EOBComponent) {
                     sBuilder.Append(entropyComponent.HuffmanTreePath);
                 } else {
                     sBuilder.Append(entropyComponent.HuffmanTreePath + entropyComponent.Amplitude);
@@ -182,7 +184,7 @@ namespace StegaProject {
             int count = 0;
 
             foreach (EntropyComponent entropyComponent in EntropyComponents) {
-                if (entropyComponent.Amplitude != "EOB" && !entropyComponent.IsDC) {
+                if (entropyComponent is ACComponent) {
                     count++;
                 }
             }
