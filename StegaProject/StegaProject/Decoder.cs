@@ -43,7 +43,6 @@ namespace StegaProject {
 
         private void getBinaryData(JPEGExtractor extractor) {
             string data = extractor.GetCompressedImageData();
-
             StringBuilder sBuilder = new StringBuilder();
 
             for (int i = 0; i < data.Length; i++) {
