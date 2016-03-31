@@ -84,13 +84,14 @@
             this.TextBox.Size = new System.Drawing.Size(246, 176);
             this.TextBox.TabIndex = 4;
             this.TextBox.Text = "";
+            this.TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // LengthOfText
             // 
             this.LengthOfText.Location = new System.Drawing.Point(568, 208);
             this.LengthOfText.Name = "LengthOfText";
             this.LengthOfText.ReadOnly = true;
-            this.LengthOfText.Size = new System.Drawing.Size(47, 20);
+            this.LengthOfText.Size = new System.Drawing.Size(69, 20);
             this.LengthOfText.TabIndex = 5;
             // 
             // SizeOfHammingMatrix

@@ -41,7 +41,7 @@ namespace StegaProject {
                 TextBox.Enabled = true;
                 LengthOfText.Enabled = true;
                 SizeOfHammingMatrix.Enabled = true;
-                LengthOfText.Text = ((int)(Decoder.ComponentsThatCanBeChanged / ((int)Math.Pow(2, (int)SizeOfHammingMatrix.Value) - 1) * SizeOfHammingMatrix.Value / 8)).ToString();
+                LengthOfText.Text = "0 / " + ((int)(Decoder.ComponentsThatCanBeChanged / ((int)Math.Pow(2, (int)SizeOfHammingMatrix.Value) - 1) * SizeOfHammingMatrix.Value / 8)).ToString();
             }                      
         }
 
@@ -63,7 +63,11 @@ namespace StegaProject {
         }
 
         private void SizeOfHammingMatrix_ValueChanged(object sender, EventArgs e) {
-            LengthOfText.Text = ((int)(Decoder.ComponentsThatCanBeChanged / ((int)Math.Pow(2, (int)SizeOfHammingMatrix.Value) - 1) * SizeOfHammingMatrix.Value / 8)).ToString();
+            LengthOfText.Text = TextBox.Text.Length + " / " + ((int)(Decoder.ComponentsThatCanBeChanged / ((int)Math.Pow(2, (int)SizeOfHammingMatrix.Value) - 1) * SizeOfHammingMatrix.Value / 8)).ToString();
+        }
+
+        private void TextBox_TextChanged(object sender, EventArgs e) {
+            LengthOfText.Text = TextBox.Text.Length + " / " + ((int)(Decoder.ComponentsThatCanBeChanged / ((int)Math.Pow(2, (int)SizeOfHammingMatrix.Value) - 1) * SizeOfHammingMatrix.Value / 8)).ToString();
         }
     }
 }

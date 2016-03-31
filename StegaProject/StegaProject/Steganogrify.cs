@@ -79,6 +79,7 @@ namespace StegaProject {
 
             for (int i = 0; i < HammingMatrix.Rows; i++) {
                 difference[i] = (matrixVectorProductResult[i] + MsgToEncodeInBits[HammingMatrix.Rows * currentIteration + i]) % 2;
+                //difference[i] = (matrixVectorProductResult[i] + ((HammingMatrix.Rows * currentIteration + i) < MsgToEncodeInBits.Length ? MsgToEncodeInBits[HammingMatrix.Rows * currentIteration + i] : matrixVectorProductResult[i])) % 2;
             }
 
             LSBsThatCanBeChanged = changeLSB(difference, LSBsThatCanBeChanged, currentIteration);
