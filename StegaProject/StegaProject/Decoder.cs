@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using HuffmanTreeBuilder;
 
-
 namespace StegaProject {
     public class Decoder {
 
@@ -23,7 +22,7 @@ namespace StegaProject {
         /// Decodes compressed image data.
         /// </summary>
         /// <para name="extractor"></para>
-        public Decoder(JPEGExtractor extractor) {
+        public Decoder(JPEGFileHandler extractor) {
             CurrentIndex = 0;
             HuffmanTrees = new List<HuffmanTree>();
             EntropyComponents = new List<EntropyComponent>();
@@ -35,7 +34,7 @@ namespace StegaProject {
             Console.WriteLine();
         }
 
-        private void buildHuffmanTrees(JPEGExtractor extractor) {
+        private void buildHuffmanTrees(JPEGFileHandler extractor) {
             List<string> DHT = extractor.GetDHT();
 
             foreach (string table in DHT) {
@@ -43,7 +42,7 @@ namespace StegaProject {
             }
         }
 
-        private void getBinaryData(JPEGExtractor extractor) {
+        private void getBinaryData(JPEGFileHandler extractor) {
             string data = extractor.GetCompressedImageData();
             StringBuilder sBuilder = new StringBuilder();
 
@@ -115,7 +114,7 @@ namespace StegaProject {
                 EntropyComponents.Add(new EOBComponent(huffmanTreePath, huffmanLeafHexValue));
                 return true;
             }
-
+            
             return false;
         }
 
