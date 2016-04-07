@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HuffmanTreeBuilder
 {
@@ -16,8 +14,6 @@ namespace HuffmanTreeBuilder
 
         public HuffmanTree left;
         public HuffmanTree right;
-
-        
 
         public HuffmanTree(string DHT) : this("", DHT) {
 
@@ -39,7 +35,7 @@ namespace HuffmanTreeBuilder
             }
         }
 
-        public String SearchFor(String binAddr) {
+        public string SearchFor(string binAddr, int index) {
             //Takes a binary sequence by string and seraches for a value. 
             //If no leaf is found at that address, an empty string is returned.
             if (this.leaf) {
@@ -49,20 +45,17 @@ namespace HuffmanTreeBuilder
                     return "";
                 }
             } else {
-                String result;
-                if (this.left == null) {
+                string result;
+
+                if (binAddr.Length <= index) {
                     result = "";
+                } else if (binAddr[index] == '0') { // Go left 
+                    result = this.left.SearchFor(binAddr, index + 1);
                 } else {
-                    result = this.left.SearchFor(binAddr);
-                }
-                if (this.right == null) {
-                    result += "";
-                } else {
-                    result += this.right.SearchFor(binAddr);
+                    result = this.right.SearchFor(binAddr, index + 1);
                 }
                 return result;
             }
-
         }
         
         public void printAddresses() {
@@ -86,12 +79,12 @@ namespace HuffmanTreeBuilder
         public void populateLists(string DHT) {
 
             HuffmanTree.DHTLists = new LinkedList<LinkedList<string>> { };
-            String[] dhtsplit = DHT.Split(' ');
+            string[] dhtsplit = DHT.Split(' ');
             int valueIndex = 17;
             for (int i = 0; i < 17; i++) {
 
-                int dhtamount;
-                int.TryParse(dhtsplit[i], out dhtamount);
+                int dhtamount = Convert.ToInt32(dhtsplit[i].ToString(), 16);
+
                 LinkedList<string> valuesList = new LinkedList<string> { };
                 for (int d = valueIndex; d < valueIndex + dhtamount; d++) {
                     valuesList.AddLast(dhtsplit[d]);
@@ -99,12 +92,11 @@ namespace HuffmanTreeBuilder
                 valueIndex += dhtamount;
                 HuffmanTree.DHTLists.AddLast(valuesList);
             }
-
+            
         }
 
         public LinkedList<string> levelList() {
             // returns the list of values for the treelevel of this node.
-            Console.WriteLine("fetching levelList for {0}", this.lvl);
             return HuffmanTree.DHTLists.ElementAt(this.lvl);
         }
 

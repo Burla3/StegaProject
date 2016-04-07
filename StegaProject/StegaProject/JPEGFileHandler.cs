@@ -10,7 +10,7 @@ namespace StegaProject {
     /// <summary>
     /// This class holds methods to process a JPEG file. The class is able to load and save a JPEG file aswell as gettting markers' data, compressed image data and all data from it.
     /// </summary>
-    class JPEGFileHandler {
+    public class JPEGFileHandler {
         private const byte MARKERLENGTH = 2;
         private const byte FIELDLENGTH = 2;
         private const string DQTMARKER = "FFDB";
@@ -22,18 +22,19 @@ namespace StegaProject {
 
         private byte[] fileBytes;
 
-        private string RemoveDashes( string s ) {
-            return s.Replace( "-", "" );
+        private string RemoveDashes(string s) {
+            return s.Replace("-", "");
         }
 
-        private string ReplaceDashesWithSpaces( string s ) {
-            return s.Replace( "-", " " );
+        private string ReplaceDashesWithSpaces(string s) {
+            return s.Replace("-", " ");
         }
 
-        private int FindMarker( string marker, int startIndex = 0 ) {
+        private int FindMarker(string marker, int startIndex = 0) {
             int index = startIndex;
-
-            while ( index != -1 && index < fileBytes.Length - 1 && RemoveDashes( BitConverter.ToString( fileBytes, index, MARKERLENGTH ) ) != marker ) {
+            
+            while ( index != -1 && index < fileBytes.Length - 1 &&
+                    RemoveDashes( BitConverter.ToString( fileBytes, index, MARKERLENGTH ) ) != marker ) {
                 index++;
             }
 
@@ -44,11 +45,11 @@ namespace StegaProject {
             return -1;
         }
 
-        private int FindDataStart( string marker, int startIndex = 0 ) {
+        private int FindDataStart(string marker, int startIndex = 0) {
             int index = startIndex;
 
-            index = FindMarker( marker, startIndex );
-
+            index = FindMarker(marker, startIndex);
+            
             if ( index != -1 ) {
                 return index + ( MARKERLENGTH + FIELDLENGTH );
             }
@@ -56,37 +57,37 @@ namespace StegaProject {
             return -1;
         }
 
-        private List<string> GetFieldData( string marker ) {
+        private List<string> GetFieldData(string marker) {
             List<string> list = new List<string>();
 
-            int index = FindMarker( marker );
-            int fieldLength = GetFieldLength( marker );
-            int dataStart = FindDataStart( marker );
-
+            int index = FindMarker(marker);
+            int fieldLength = GetFieldLength(marker);
+            int dataStart = FindDataStart(marker);
+            
             while ( index != -1 ) {
                 list.Add( ReplaceDashesWithSpaces( BitConverter.ToString( fileBytes, dataStart, fieldLength ) ) );
 
                 index++;
 
-                index = FindMarker( marker, index );
-                fieldLength = GetFieldLength( marker, index );
-                dataStart = FindDataStart( marker, index );
+                index = FindMarker(marker, index);
+                fieldLength = GetFieldLength(marker, index);
+                dataStart = FindDataStart(marker, index);
             }
 
             return list;
         }
 
-        private int GetFieldLength( string marker, int startIndex = 0 ) {
-            int index = FindMarker( marker, startIndex );
-
+        private int GetFieldLength(string marker, int startIndex = 0) {
+            int index = FindMarker(marker, startIndex);
+            
             return int.Parse( RemoveDashes( BitConverter.ToString( fileBytes, index + MARKERLENGTH, MARKERLENGTH ) ),
                 NumberStyles.HexNumber ) - FIELDLENGTH;
         }
 
         private bool DataContainsThumbnail() {
-            int firstIndex = FindMarker( SOSMARKER );
+            int firstIndex = FindMarker(SOSMARKER);
 
-            if ( FindMarker( SOSMARKER, firstIndex + MARKERLENGTH ) != -1 ) {
+            if (FindMarker(SOSMARKER, firstIndex + MARKERLENGTH) != -1) {
                 return true;
             }
 
@@ -155,7 +156,7 @@ namespace StegaProject {
         /// </summary>
         /// <returns>A List containing DefineQuantizationTable marker data.</returns>
         public List<string> GetDQT() {
-            return GetFieldData( DQTMARKER );
+            return GetFieldData(DQTMARKER);
         }
 
         /// <summary>
@@ -163,7 +164,7 @@ namespace StegaProject {
         /// </summary>
         /// <returns>A List containing DefineHuffmanTable marker data.</returns>
         public List<string> GetDHT() {
-            return GetFieldData( DHTMARKER );
+            return GetFieldData(DHTMARKER);
         }
 
         /// <summary>
@@ -171,7 +172,7 @@ namespace StegaProject {
         /// </summary>
         /// <returns>A List containing DefineRestartInteroperability marker data.</returns>
         public List<string> GetDRI() {
-            return GetFieldData( DRIMARKER );
+            return GetFieldData(DRIMARKER);
         }
 
         /// <summary>
@@ -179,7 +180,7 @@ namespace StegaProject {
         /// </summary>
         /// <returns>A List containing StartOfFrame marker data.</returns>
         public List<string> GetSOF() {
-            return GetFieldData( SOFMARKER );
+            return GetFieldData(SOFMARKER);
         }
 
         /// <summary>
@@ -187,7 +188,7 @@ namespace StegaProject {
         /// </summary>
         /// <returns>A List containing StartOfScan marker data.</returns>
         public List<string> GetSOS() {
-            return GetFieldData( SOSMARKER );
+            return GetFieldData(SOSMARKER);
         }
 
         /// <summary>
@@ -195,23 +196,23 @@ namespace StegaProject {
         /// </summary>
         /// <returns>A string containing compressed image data.</returns>
         public string GetCompressedImageData() {
-            int index = FindMarker( SOSMARKER );
+            int index = FindMarker(SOSMARKER);
 
-            if ( DataContainsThumbnail() ) {
-                index = FindMarker( SOSMARKER, index + MARKERLENGTH );
+            if (DataContainsThumbnail()) {
+                index = FindMarker(SOSMARKER, index + MARKERLENGTH);
             }
 
-            int SOSFieldLength = GetFieldLength( SOSMARKER, index );
+            int SOSFieldLength = GetFieldLength(SOSMARKER, index);
 
             int startIndex = index + ( MARKERLENGTH + FIELDLENGTH ) + SOSFieldLength;
-
+            
             while ( RemoveDashes( BitConverter.ToString( fileBytes, index, MARKERLENGTH ) ) != EOIMARKER ) {
                 index++;
             }
 
             int endIndex = index;
-
-            return ReplaceDashesWithSpaces( BitConverter.ToString( fileBytes, startIndex, endIndex - startIndex ) );
+            
+            return RemoveDashes( BitConverter.ToString( fileBytes, startIndex, endIndex - startIndex ) );
         }
 
         /// <summary>
