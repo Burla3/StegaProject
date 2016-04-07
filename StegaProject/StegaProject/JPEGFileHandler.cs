@@ -4,15 +4,15 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.Security;
 
 namespace StegaProject {
     /// <summary>
-    /// This class holds methods to extract different markers' data, compressed image data and all data from JPEG files.
+    /// This class holds methods to process a JPEG file. The class is able to load and save a JPEG file aswell as gettting markers' data, compressed image data and all data from it.
     /// </summary>
-    class JPEGExtractor {
+    class JPEGFileHandler {
         private const byte MARKERLENGTH = 2;
-        private const byte FIELDLENGTHOFFSET = 2;
-        private const byte MARKERANDFIELDLENGTHOFFSET = 4;
+        private const byte FIELDLENGTH = 2;
         private const string DQTMARKER = "FFDB";
         private const string DHTMARKER = "FFC4";
         private const string DRIMARKER = "FFDD";
@@ -20,8 +20,7 @@ namespace StegaProject {
         private const string SOSMARKER = "FFDA";
         private const string EOIMARKER = "FFD9";
 
-        private MemoryStream memoryStream = new MemoryStream();
-        private byte[] imageBytes;
+        private byte[] fileBytes;
 
         private string RemoveDashes( string s ) {
             return s.Replace( "-", "" );
@@ -34,11 +33,11 @@ namespace StegaProject {
         private int FindMarker( string marker, int startIndex = 0 ) {
             int index = startIndex;
 
-            while ( index != -1 && index < imageBytes.Length - 1 && RemoveDashes( BitConverter.ToString( imageBytes, index, MARKERLENGTH ) ) != marker ) {
+            while ( index != -1 && index < fileBytes.Length - 1 && RemoveDashes( BitConverter.ToString( fileBytes, index, MARKERLENGTH ) ) != marker ) {
                 index++;
             }
 
-            if ( index < imageBytes.Length - 1 ) {
+            if ( index < fileBytes.Length - 1 ) {
                 return index;
             }
 
@@ -51,7 +50,7 @@ namespace StegaProject {
             index = FindMarker( marker, startIndex );
 
             if ( index != -1 ) {
-                return index + MARKERANDFIELDLENGTHOFFSET;
+                return index + ( MARKERLENGTH + FIELDLENGTH );
             }
 
             return -1;
@@ -65,7 +64,7 @@ namespace StegaProject {
             int dataStart = FindDataStart( marker );
 
             while ( index != -1 ) {
-                list.Add( ReplaceDashesWithSpaces( BitConverter.ToString( imageBytes, dataStart, fieldLength ) ) );
+                list.Add( ReplaceDashesWithSpaces( BitConverter.ToString( fileBytes, dataStart, fieldLength ) ) );
 
                 index++;
 
@@ -80,8 +79,8 @@ namespace StegaProject {
         private int GetFieldLength( string marker, int startIndex = 0 ) {
             int index = FindMarker( marker, startIndex );
 
-            return int.Parse( RemoveDashes( BitConverter.ToString( imageBytes, index + MARKERLENGTH, MARKERLENGTH ) ),
-                NumberStyles.HexNumber ) - FIELDLENGTHOFFSET;
+            return int.Parse( RemoveDashes( BitConverter.ToString( fileBytes, index + MARKERLENGTH, MARKERLENGTH ) ),
+                NumberStyles.HexNumber ) - FIELDLENGTH;
         }
 
         private bool DataContainsThumbnail() {
@@ -97,35 +96,11 @@ namespace StegaProject {
         /// <summary>
         /// Calls the LoadImage method.
         /// </summary>
-        /// <param name="path">Path to the image file you wish to extract from.</param>
-        public JPEGExtractor( string path ) {
+        /// <param name="path">Path to the JPEG file you wish to process.</param>
+        public JPEGFileHandler( string path ) {
             LoadImage( path );
         }
 
-        /// <summary>
-        /// Loads an image file into the class.
-        /// </summary>
-        /// <param name="path">Path to the image file you wish to extract from.</param>
-        public void LoadImage( string path ) {
-            try {
-                Image image = Image.FromFile( path );
-                image.Save( memoryStream, ImageFormat.Jpeg );
-                imageBytes = memoryStream.ToArray();
-            } catch ( FileNotFoundException e ) {
-                Console.WriteLine( "Tried to access file: " + e.FileName + ". However, I was not able to find it. Exception message: " + e.Message );
-            }
-        }
-
-
-        /// <summary>
-        /// Saves a MemoryStream as a JPEG image file at the given path.
-        /// </summary>
-        /// <param name="imageStream">MemoryStream containing JPEG image bytes.</param>
-        /// <param name="path">Path to the image file you wish to save.</param>
-        public void SaveImage( MemoryStream imageStream, string path ) {
-            Image image = Image.FromStream( imageStream );
-            image.Save( path, ImageFormat.Jpeg );
-        }
 
         /// <summary>
         /// Gets DefineQuantizationTable marker data as a List.
@@ -180,15 +155,15 @@ namespace StegaProject {
 
             int SOSFieldLength = GetFieldLength( SOSMARKER, index );
 
-            int startIndex = index + MARKERANDFIELDLENGTHOFFSET + SOSFieldLength;
+            int startIndex = index + ( MARKERLENGTH + FIELDLENGTH ) + SOSFieldLength;
 
-            while ( RemoveDashes( BitConverter.ToString( imageBytes, index, MARKERLENGTH ) ) != EOIMARKER ) {
+            while ( RemoveDashes( BitConverter.ToString( fileBytes, index, MARKERLENGTH ) ) != EOIMARKER ) {
                 index++;
             }
 
             int endIndex = index;
 
-            return ReplaceDashesWithSpaces( BitConverter.ToString( imageBytes, startIndex, endIndex - startIndex ) );
+            return ReplaceDashesWithSpaces( BitConverter.ToString( fileBytes, startIndex, endIndex - startIndex ) );
         }
 
         /// <summary>
@@ -196,7 +171,7 @@ namespace StegaProject {
         /// </summary>
         /// <returns>A string containing all data from MemoryStream.</returns>
         public string GetAllData() {
-            return ReplaceDashesWithSpaces( BitConverter.ToString( imageBytes, 0, imageBytes.Length ) );
+            return ReplaceDashesWithSpaces( BitConverter.ToString( fileBytes, 0, fileBytes.Length ) );
         }
     }
 }

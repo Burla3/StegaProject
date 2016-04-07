@@ -17,7 +17,7 @@ namespace StegaProject {
 
         public Decoder(string path) {
 
-            JPEGExtractor s = new JPEGExtractor();
+            JPEGFileHandler s = new JPEGFileHandler();
             s.LoadImage(path);
 
             string data = s.GetCompressedImageData();
