@@ -101,6 +101,54 @@ namespace StegaProject {
             LoadImage( path );
         }
 
+        /// <summary>
+        /// Loads a JPEG file into the class.
+        /// </summary>
+        /// <param name="path">Path to the JPEG file you wish to process.</param>
+        public void LoadImage( string path ) {
+            try {
+                fileBytes = File.ReadAllBytes( path );
+            } catch ( ArgumentException e ) {
+                Console.WriteLine( "Path is a zero-length string, contains only white space, or contains one or more invalid characters as defined by InvalidPathChars. Message: " + e.Message );
+            } catch ( PathTooLongException e ) {
+                Console.WriteLine( "The specified path, file name, or both exceed the system-defined maximum length. For example, on Windows-based platforms, paths must be less than 248 characters, and file names must be less than 260 characters. Message: " + e.Message );
+            } catch ( DirectoryNotFoundException e ) {
+                Console.WriteLine( "The specified path is invalid (for example, it is on an unmapped drive). Message: " + e.Message );
+            } catch ( IOException e ) {
+                Console.WriteLine( "An I/O error occurred while opening the file. Message: " + e.Message );
+            } catch ( UnauthorizedAccessException e ) {
+                Console.WriteLine( "This operation is not supported on the current platform. - or - path specified a directory. - or - The caller does not have the required permission. Message: " + e.Message );
+            } catch ( NotSupportedException e ) {
+                Console.WriteLine( "path is in an invalid format. Message: " + e.Message );
+            } catch ( SecurityException e ) {
+                Console.WriteLine( "The caller does not have the required permission. Message: " + e.Message );
+            }
+        }
+
+
+        /// <summary>
+        /// Saves a JPEG file at the given path based on the contained compressed image data.
+        /// </summary>
+        /// <param name="path">Path to the JPEG file you wish to save.</param>
+        public void SaveImage( string path ) {
+            try {
+                File.WriteAllBytes( path, fileBytes );
+            } catch ( ArgumentException e ) {
+                Console.WriteLine( "Path is a zero-length string, contains only white space, or contains one or more invalid characters as defined by InvalidPathChars. Message: " + e.Message );
+            } catch ( PathTooLongException e ) {
+                Console.WriteLine( "The specified path, file name, or both exceed the system-defined maximum length. For example, on Windows-based platforms, paths must be less than 248 characters, and file names must be less than 260 characters. Message: " + e.Message );
+            } catch ( DirectoryNotFoundException e ) {
+                Console.WriteLine( "The specified path is invalid (for example, it is on an unmapped drive). Message: " + e.Message );
+            } catch ( IOException e ) {
+                Console.WriteLine( "An I/O error occurred while opening the file. Message: " + e.Message );
+            } catch ( UnauthorizedAccessException e ) {
+                Console.WriteLine( "This operation is not supported on the current platform. - or - path specified a directory. - or - The caller does not have the required permission. Message: " + e.Message );
+            } catch ( NotSupportedException e ) {
+                Console.WriteLine( "path is in an invalid format. Message: " + e.Message );
+            } catch ( SecurityException e ) {
+                Console.WriteLine( "The caller does not have the required permission. Message: " + e.Message );
+            }
+        }
 
         /// <summary>
         /// Gets DefineQuantizationTable marker data as a List.
