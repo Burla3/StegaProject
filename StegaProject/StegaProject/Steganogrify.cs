@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace StegaProject {
     class Steganogrify {
@@ -7,17 +8,21 @@ namespace StegaProject {
         private HammingMatrix HammingMatrix { get; }
 
         private int[] MsgToEncodeInBits { get; }
+        public bool EndOfString { get; set; }
         
         public Steganogrify(string msgToEncode, int sizeOfMatrix) {
-            MsgToEncodeInBits = new int[msgToEncode.Length * 8];
+            MsgToEncodeInBits = new int[(msgToEncode.Length + 1) * 8];
             string tempString;
             int index = 0;
 
-            for (int i = 0; i < msgToEncode.Length - 8; i++) {
+            for (int i = 0; i < msgToEncode.Length; i++) {
                 tempString = Convert.ToString(msgToEncode[i], 2).PadLeft(8, '0');
                 foreach (char c in tempString) {
                     MsgToEncodeInBits[index++] = Convert.ToInt32(c.ToString(), 2);
                 }          
+            }
+            for (int i = index; i < index + 8; i++) {
+                MsgToEncodeInBits[i] = 0;
             }
                     
             HammingMatrix = new HammingMatrix(sizeOfMatrix);
@@ -33,8 +38,9 @@ namespace StegaProject {
 
                 foreach (int bit in msgInBits) {
                     msgAsString += bit.ToString();
-                }                
+                }     
             }
+            Console.WriteLine();
 
             string decodedMsg = "";
             string bitsToConvertToChar = "";
@@ -51,7 +57,7 @@ namespace StegaProject {
         public void encodeMsg(List<EntropyComponent> entropyComponents) {
             List<LSBComponent> LSBsThatCanBeChanged = getLSBsThatCanBeChanged(entropyComponents);
 
-            for (int i = 0; i < LSBsThatCanBeChanged.Count / HammingMatrix.Cols; i++) {
+            for (int i = 0; i < MsgToEncodeInBits.Length / HammingMatrix.Rows; i++) {
                 LSBsThatCanBeChanged = checkLSB(LSBsThatCanBeChanged, i);
             }
 

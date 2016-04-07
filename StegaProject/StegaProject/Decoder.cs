@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using HuffmanTreeBuilder;
 
@@ -31,6 +32,7 @@ namespace StegaProject {
             getBinaryData(extractor);
             decodeBinaryData();
             ComponentsThatCanBeChanged = countValuesThatCanBeChanged();
+            Console.WriteLine();
         }
 
         private void buildHuffmanTrees(JPEGExtractor extractor) {

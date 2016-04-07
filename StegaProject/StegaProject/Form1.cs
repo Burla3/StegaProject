@@ -62,12 +62,25 @@ namespace StegaProject {
             TextBox.Text = steganogrify.decodeMsg(Decoder.EntropyComponents, Decoder.ComponentsThatCanBeChanged);
         }
 
-        private void SizeOfHammingMatrix_ValueChanged(object sender, EventArgs e) {
-            LengthOfText.Text = TextBox.Text.Length + " / " + ((int)(Decoder.ComponentsThatCanBeChanged / ((int)Math.Pow(2, (int)SizeOfHammingMatrix.Value) - 1) * SizeOfHammingMatrix.Value / 8)).ToString();
+        private void SizeOfHammingMatrix_ValueChanged(object sender, EventArgs e)
+        {
+            int maxTextLength = (int)
+                (Decoder.ComponentsThatCanBeChanged/((int) Math.Pow(2, (int) SizeOfHammingMatrix.Value) - 1)*
+                 SizeOfHammingMatrix.Value/8);
+            LengthOfText.Text = TextBox.Text.Length + " / " + maxTextLength;
+            TextBox.MaxLength = maxTextLength;
+            if (TextBox.TextLength > maxTextLength) {
+                TextBox.Text = TextBox.Text.Remove(maxTextLength);
+            }
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e) {
-            LengthOfText.Text = TextBox.Text.Length + " / " + ((int)(Decoder.ComponentsThatCanBeChanged / ((int)Math.Pow(2, (int)SizeOfHammingMatrix.Value) - 1) * SizeOfHammingMatrix.Value / 8)).ToString();
+            int maxTextLength =
+                (int)
+                    (Decoder.ComponentsThatCanBeChanged/((int) Math.Pow(2, (int) SizeOfHammingMatrix.Value) - 1)*
+                     SizeOfHammingMatrix.Value/8);
+            LengthOfText.Text = TextBox.Text.Length + " / " + maxTextLength;
+            TextBox.MaxLength = maxTextLength;
         }
     }
 }
