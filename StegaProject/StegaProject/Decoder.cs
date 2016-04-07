@@ -21,13 +21,13 @@ namespace StegaProject {
         /// Decodes compressed image data.
         /// </summary>
         /// <para name="extractor"></para>
-        public Decoder(JPEGFileHandler) {
+        public Decoder(JPEGFileHandler extractor) {
             CurrentIndex = 0;
             HuffmanTrees = new List<HuffmanTree>();
             EntropyComponents = new List<EntropyComponent>();
 
-            buildHuffmanTrees(JPEGFileHandler);
-            getBinaryData(JPEGFileHandler);
+            buildHuffmanTrees(extractor);
+            getBinaryData(extractor);
             decodeBinaryData();
             ComponentsThatCanBeChanged = countValuesThatCanBeChanged();
         }
