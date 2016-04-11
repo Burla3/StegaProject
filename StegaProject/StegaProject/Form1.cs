@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace StegaProject {
     public partial class Form1 : Form {
-        public JPEGExtractor Extractor { get; set; }
+        public JPEGFileHandler JPEGFile { get; set; }
         public Decoder Decoder { get; set; }
         public string LoadPath { get; set; }
 
@@ -32,8 +32,8 @@ namespace StegaProject {
                 LoadedPicture.ImageLocation = LoadPath;
                 LoadedPicture.SizeMode = PictureBoxSizeMode.StretchImage;
                 LoadedPicture.Load();
-                Extractor = new JPEGExtractor(LoadPath);
-                Decoder = new Decoder(Extractor);
+                JPEGFile = new JPEGFileHandler(LoadPath);
+                Decoder = new Decoder(JPEGFile);
 
                 TextBox.ReadOnly = false;
                 EncodeMsg.Enabled = true;
@@ -51,7 +51,7 @@ namespace StegaProject {
 
             steganogrify.encodeMsg(Decoder.EntropyComponents);
             Console.WriteLine(Path.GetDirectoryName(LoadPath) + @"\test.jpg");
-            Extractor.SaveImage(Decoder.getReEncodedRawHexData(), Path.GetDirectoryName(LoadPath) + @"\test.jpg");
+            JPEGFile.SaveImage(Path.GetDirectoryName(LoadPath) + @"\test.jpg");
             TextBox.ReadOnly = true;
         }
 
