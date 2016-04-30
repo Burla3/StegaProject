@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StegaProject", "StegaProject\StegaProject.csproj", "{2480C075-E04E-40F8-9573-CB2E713E006F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HammingSteganography", "HammingSteganography\HammingSteganography.csproj", "{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HammingSteganographyTests", "HammingSteganographyTests\HammingSteganographyTests.csproj", "{529E3774-FDC3-44E9-BACF-EE6945E42D92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2480C075-E04E-40F8-9573-CB2E713E006F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2480C075-E04E-40F8-9573-CB2E713E006F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2480C075-E04E-40F8-9573-CB2E713E006F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2480C075-E04E-40F8-9573-CB2E713E006F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
