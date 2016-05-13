@@ -11,6 +11,7 @@ namespace HammingSteganography {
     /// It implements the ISteganographier interface.
     /// </summary>
     public class Steganographier : ISteganographier {
+        public event StegaProgressEvent Progress;
         private HammingMatrix HammingMatrix { get; }
 
         private const int BitsPerAscii = 8;
@@ -128,6 +129,7 @@ namespace HammingSteganography {
             message = BitArrayUtilities.ReverseBitArray(message);
 
             int maxNumberOfVectors = message.Count / HammingMatrix.Rows;
+            int currentProgress = 0;
 
             // Calculates each part of the message
             for (int i = 0; i < maxNumberOfVectors; i++) {
@@ -142,6 +144,13 @@ namespace HammingSteganography {
                 }
 
                 resultArray = BitArrayUtilities.CombineTwoBitArrays(resultArray, coverVector);
+
+                if ((int)((float)i / (float)maxNumberOfVectors * 100f) > currentProgress) {
+                    currentProgress = (int)((float)i / (float)maxNumberOfVectors * 100f);
+                    if (Progress != null) {
+                        Progress(this, new ProgressEventArgs(currentProgress));
+                    }
+                }
             }
 
             // Add the rest of the coverData, which did not go through the message process to the resultArray.
