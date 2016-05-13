@@ -86,7 +86,6 @@ namespace HammingSteganography {
             return messageArray;
         }
 
-
         /// <summary>
         /// Encodes the ASCII <paramref name="message"/> into the <paramref name="coverData"/>.
         /// This use <see cref="Encoding"/> to convert to binary and then use <see cref="EncodeBinaryMessage"/> to encode.
@@ -160,9 +159,6 @@ namespace HammingSteganography {
         /// <param name="coverVector">The vector to change a bit in.</param>
         /// <returns>The changed <paramref name="coverVector"/>.</returns>
         private BitArray ChangeLsb(BitArray differenceVector, BitArray coverVector) {
-            Contract.Requires<ArgumentNullException>(differenceVector != null);
-            Contract.Requires<ArgumentNullException>(coverVector != null);
-            Contract.Requires<ArgumentException>(HammingMatrix.Cols == coverVector.Count);
 
             int bitToChange = 0;
 
@@ -190,9 +186,6 @@ namespace HammingSteganography {
         /// <param name="vector">Binary vector.</param>
         /// <returns>A binary vector.</returns>
         private static BitArray BinaryMatrixVectorProduct(HammingMatrix matrix, BitArray vector) {
-            Contract.Requires<ArgumentNullException>(matrix != null);
-            Contract.Requires<ArgumentNullException>(vector != null);
-            Contract.Requires<ArgumentException>(matrix.Cols == vector.Count);
 
             BitArray result = new BitArray(matrix.Rows);
 
