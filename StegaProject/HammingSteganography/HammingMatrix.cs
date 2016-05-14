@@ -41,6 +41,7 @@ namespace HammingSteganography {
             Matrix = new bool[Rows, Cols];
 
             for (int cols = 0; cols < Cols; cols++) {
+                // Convert (column index + 1) to binary
                 int[] numberToConvert = {cols + 1};
                 BitArray bitCol = new BitArray(numberToConvert) {Length = Rows};
                 for (int rows = 0; rows < Rows; rows++) {
