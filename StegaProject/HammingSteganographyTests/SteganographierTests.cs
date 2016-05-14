@@ -16,10 +16,10 @@ namespace HammingSteganographyTests {
         [Test]
         public void DecodeAsciiMessage_DoubleSimpleValue_Calculated() {
             BitArray coverData = new BitArray(new[] {false, true, true, false, true, true, false,
-                                                     true, false, false, false, true, false, false,
+                                                     true, false, true, false, true, true, false,
                                                      true, true, true, false, true, false, true,
-                                                     true, false, true, true, true, false, false,
-                                                     false, false, false, false, true, true, true,
+                                                     true, true, true, true, true, false, true,
+                                                     false, true, false, false, true, true, false,
                                                      false, false, false, true, true, true, true});
 
             string resultMessage = Steganographier.DecodeAsciiMessage(coverData);
@@ -32,7 +32,7 @@ namespace HammingSteganographyTests {
         [Test]
         public void DecodeAsciiMessage_SingleSimpleValue_Calculated() {
             BitArray coverData = new BitArray(new[] {false, true, true, false, true, true, false,
-                                                     true, false, false, false, true, false, false,
+                                                     true, false, true, false, true, true, false,
                                                      true, true, true, false, true, false, true});
 
             string resultMessage = Steganographier.DecodeAsciiMessage(coverData);
@@ -44,8 +44,8 @@ namespace HammingSteganographyTests {
 
         [Test]
         public void DecodeBinaryMessage_SimpleEvenValue_Calculated() {
-            BitArray coverData = new BitArray(new[] {true, false, true, false, true, true, false,
-                                                     true, false, false, false, true, true, false});
+            BitArray coverData = new BitArray(new[] {false, false, true, true, true, true, false,
+                                                         true, false, false, false, true, true, false});
 
             BitArray resultArray = Steganographier.DecodeBinaryMessage(coverData);
 
@@ -57,7 +57,7 @@ namespace HammingSteganographyTests {
         [Test]
         public void DecodeBinaryMessage_SimpleOddValue_Calculated() {
             BitArray coverData = new BitArray(new[] {false, true, true, false, true, true, false,
-                                                     true, false, false, false, true, false, false,
+                                                     true, false, true, false, true, true, false,
                                                      true, true, true, false, true, false, true});
 
             BitArray resultArray = Steganographier.DecodeBinaryMessage(coverData);
@@ -70,7 +70,7 @@ namespace HammingSteganographyTests {
         [Test]
         public void DecodeBinaryMessage_NotDivisibelCoverData_Calculated() {
             BitArray coverData = new BitArray(new[] {false, true, true, false, true, true, false,
-                                                     true, false, false, false, true, false, false,
+                                                     true, false, true, false, true, true, false,
                                                      true, true, true, false, true, false, true,
                                                      false, true, false, false});
 
@@ -89,7 +89,7 @@ namespace HammingSteganographyTests {
 
             BitArray resultArray = Steganographier.EncodeBinaryMessage(coverData, message);
 
-            BitArray expectedArray = new BitArray(new[] {true, false, true, false, true, true, false,
+            BitArray expectedArray = new BitArray(new[] {false, false, true, true, true, true, false,
                                                          true, false, false, false, true, true, false});
 
             Assert.AreEqual(expectedArray, resultArray);
@@ -105,7 +105,7 @@ namespace HammingSteganographyTests {
             BitArray resultArray = Steganographier.EncodeBinaryMessage(coverData, message);
 
             BitArray expectedArray = new BitArray(new[] {false, true, true, false, true, true, false,
-                                                         true, false, false, false, true, false, false,
+                                                         true, false, true, false, true, true, false,
                                                          true, true, true, false, true, false, true});
 
             Assert.AreEqual(expectedArray, resultArray);
@@ -122,7 +122,7 @@ namespace HammingSteganographyTests {
             BitArray resultArray = Steganographier.EncodeBinaryMessage(coverData, message);
 
             BitArray expectedArray = new BitArray(new[] {false, true, true, false, true, true, false,
-                                                         true, false, false, false, true, false, false,
+                                                         true, false, true, false, true, true, false,
                                                          true, true, true, false, true, false, true,
                                                          false, true, false, false});
 
@@ -139,7 +139,7 @@ namespace HammingSteganographyTests {
             BitArray resultArray = Steganographier.EncodeAsciiMessage(coverData, message);
 
             BitArray expectedArray = new BitArray(new[] {false, true, true, false, true, true, false,
-                                                         true, false, false, false, true, false, false,
+                                                         true, false, true, false, true, true, false,
                                                          true, true, true, false, true, false, true});
 
             Assert.AreEqual(expectedArray, resultArray);
@@ -158,10 +158,10 @@ namespace HammingSteganographyTests {
             BitArray resultArray = Steganographier.EncodeAsciiMessage(coverData, message);
 
             BitArray expectedArray = new BitArray(new[] {false, true, true, false, true, true, false,
-                                                         true, false, false, false, true, false, false,
+                                                         true, false, true, false, true, true, false,
                                                          true, true, true, false, true, false, true,
-                                                         true, false, true, true, true, false, false,
-                                                         false, false, false, false, true, true, true,
+                                                         true, true, true, true, true, false, true,
+                                                         false, true, false, false, true, true, false,
                                                          false, false, false, true, true, true, true});
 
             Assert.AreEqual(expectedArray, resultArray);

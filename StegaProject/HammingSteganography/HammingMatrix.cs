@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics.Contracts;
 
 namespace HammingSteganography {
@@ -40,9 +41,10 @@ namespace HammingSteganography {
             Matrix = new bool[Rows, Cols];
 
             for (int cols = 0; cols < Cols; cols++) {
-                string temp = Convert.ToString(cols + 1, 2).PadLeft(Rows, '0');
+                int[] numberToConvert = {cols + 1};
+                BitArray bitCol = new BitArray(numberToConvert) {Length = Rows};
                 for (int rows = 0; rows < Rows; rows++) {
-                    Matrix[rows, cols] = temp[rows] == '1';
+                    Matrix[rows, cols] = bitCol[rows];
                 }
             }
         }
