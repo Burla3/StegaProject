@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="HammingMatrix.cs" />
     <Compile Include="ISteganographier.cs" />
+    <Compile Include="ProgressEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steganographier.cs" />
   </ItemGroup>
