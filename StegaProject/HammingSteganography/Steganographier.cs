@@ -53,7 +53,7 @@ namespace HammingSteganography {
             int neededBytes = binaryMessage.Count / BitsPerAscii;
             byte[] messageBytes = new byte[neededBytes];
 
-            binaryMessage = BitArrayUtilities.ChangeEndianOnBitArray(binaryMessage);
+            BitArrayUtilities.ChangeEndianOnBitArray(binaryMessage);
             
             binaryMessage.CopyTo(messageBytes, 0);
 
@@ -72,7 +72,7 @@ namespace HammingSteganography {
 
             BitArray messageArray = new BitArray(0);
 
-            coverData = BitArrayUtilities.ReverseBitArray(coverData);
+            BitArrayUtilities.ReverseBitArray(coverData);
 
             int maxNumberOfVectors = coverData.Count / HammingMatrix.Cols;
 
@@ -100,8 +100,7 @@ namespace HammingSteganography {
             
             byte[] messageBytes = Encoding.ASCII.GetBytes(message);
             BitArray messageBitArray = new BitArray(messageBytes);
-            messageBitArray = BitArrayUtilities.ChangeEndianOnBitArray(messageBitArray);
-
+            BitArrayUtilities.ChangeEndianOnBitArray(messageBitArray);
             BitArrayUtilities.MakeBitArrayDivisible(messageBitArray, HammingMatrix.Rows, true);
 
             return EncodeBinaryMessage(coverData, messageBitArray);
@@ -125,8 +124,8 @@ namespace HammingSteganography {
 
             BitArray resultArray = new BitArray(0);
 
-            coverData = BitArrayUtilities.ReverseBitArray(coverData);
-            message = BitArrayUtilities.ReverseBitArray(message);
+            BitArrayUtilities.ReverseBitArray(coverData);
+            BitArrayUtilities.ReverseBitArray(message);
 
             int maxNumberOfVectors = message.Count / HammingMatrix.Rows;
             int currentProgress = 0;
