@@ -70,7 +70,8 @@ namespace HammingSteganography {
             Contract.Requires<ArgumentNullException>(coverData != null);
             Contract.Requires<ArgumentException>(coverData.Count >= HammingMatrix.Cols);
 
-            BitArray messageArray = new BitArray(0);
+            int resultIndex = 0;
+            BitArray messageArray = new BitArray(coverData.Count / HammingMatrix.Cols * HammingMatrix.Rows);
 
             BitArrayUtilities.ReverseBitArray(coverData);
 
@@ -81,7 +82,8 @@ namespace HammingSteganography {
                 BitArray coverVector = BitArrayUtilities.TakeSubBitArrayFromEnd(coverData, HammingMatrix.Cols);
                 BitArray resultVector = BinaryMatrixVectorProduct(HammingMatrix, coverVector);
 
-                messageArray = BitArrayUtilities.CombineTwoBitArrays(messageArray, resultVector);
+                BitArrayUtilities.OverwriteBitArrayAtIndex(messageArray, resultVector, resultIndex);
+                resultIndex += HammingMatrix.Rows;
             }
 
             return messageArray;
@@ -122,7 +124,8 @@ namespace HammingSteganography {
                 coverData.Count / HammingMatrix.Cols >= message.Count / HammingMatrix.Rows);
             Contract.Requires<ArgumentException>(message.Count % HammingMatrix.Rows == 0);
 
-            BitArray resultArray = new BitArray(0);
+            int resultIndex = 0;
+            BitArray resultArray = new BitArray(coverData.Count);
 
             BitArrayUtilities.ReverseBitArray(coverData);
             BitArrayUtilities.ReverseBitArray(message);
@@ -142,7 +145,8 @@ namespace HammingSteganography {
                     coverVector = ChangeLsb(differenceVector, coverVector);
                 }
 
-                resultArray = BitArrayUtilities.CombineTwoBitArrays(resultArray, coverVector);
+                BitArrayUtilities.OverwriteBitArrayAtIndex(resultArray, coverVector, resultIndex);
+                resultIndex += HammingMatrix.Cols;
 
                 if ((int)((float)i / (float)maxNumberOfVectors * 100f) > currentProgress) {
                     currentProgress = (int)((float)i / (float)maxNumberOfVectors * 100f);
@@ -154,7 +158,7 @@ namespace HammingSteganography {
 
             // Add the rest of the coverData, which did not go through the message process to the resultArray.
             BitArrayUtilities.ReverseBitArray(coverData);
-            BitArrayUtilities.CombineTwoBitArrays(resultArray, coverData);
+            BitArrayUtilities.OverwriteBitArrayAtIndex(resultArray, coverData, resultIndex);
 
             return resultArray;
         }
