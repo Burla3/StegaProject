@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Text;
 using Utilities;
@@ -130,23 +131,35 @@ namespace HammingSteganography {
             BitArrayUtilities.ReverseBitArray(coverData);
             BitArrayUtilities.ReverseBitArray(message);
 
-            int maxNumberOfVectors = message.Count / HammingMatrix.Rows;
+            int hammingRows = HammingMatrix.Rows;
+            int hammingCols = HammingMatrix.Cols;
+
+            BitArray zeroVector = new BitArray(hammingRows);
+
+            int maxNumberOfVectors = message.Count / hammingRows;
             int currentProgress = 0;
 
+            int coverDisplacement = 0;
+            int messageDisplacement = 0;
+
             // Calculates each part of the message
-            for (int i = 0; i < maxNumberOfVectors; i++) {
-                BitArray coverVector = BitArrayUtilities.TakeSubBitArrayFromEnd(coverData, HammingMatrix.Cols);
-                BitArray messageVector = BitArrayUtilities.TakeSubBitArrayFromEnd(message, HammingMatrix.Rows);
+            for (int i = 0; i < maxNumberOfVectors; i++)
+            {
+                BitArray coverVector = BitArrayUtilities.SubBitArrayFromEnd(coverData, coverDisplacement, hammingCols);
+                BitArray messageVector = BitArrayUtilities.SubBitArrayFromEnd(message, messageDisplacement, hammingRows);
+                coverDisplacement += hammingCols;
+                messageDisplacement += hammingRows;
 
                 BitArray resultVector = BinaryMatrixVectorProduct(HammingMatrix, coverVector);
                 BitArray differenceVector = resultVector.Xor(messageVector);
+
                 // Change coverVector if differenceVector is not equal to a zero vector.
-                if (!BitArrayUtilities.CompareBitArray(differenceVector, new BitArray(HammingMatrix.Rows))) {
-                    coverVector = ChangeLsb(differenceVector, coverVector);
+                if (!BitArrayUtilities.CompareBitArray(differenceVector, zeroVector)) {
+                    ChangeLsb(differenceVector, coverVector);
                 }
 
                 BitArrayUtilities.OverwriteBitArrayAtIndex(resultArray, coverVector, resultIndex);
-                resultIndex += HammingMatrix.Cols;
+                resultIndex += hammingCols;
 
                 if ((int)((float)i / (float)maxNumberOfVectors * 100f) > currentProgress) {
                     currentProgress = (int)((float)i / (float)maxNumberOfVectors * 100f);
@@ -155,6 +168,8 @@ namespace HammingSteganography {
                     }
                 }
             }
+
+            coverData.Length -= maxNumberOfVectors * HammingMatrix.Cols;
 
             // Add the rest of the coverData, which did not go through the message process to the resultArray.
             BitArrayUtilities.ReverseBitArray(coverData);
@@ -170,15 +185,18 @@ namespace HammingSteganography {
         /// <param name="differenceVector">The vector to find in the <see cref="HammingMatrix"/>.</param>
         /// <param name="coverVector">The vector to change a bit in.</param>
         /// <returns>The changed <paramref name="coverVector"/>.</returns>
-        private BitArray ChangeLsb(BitArray differenceVector, BitArray coverVector) {
+        private void ChangeLsb(BitArray differenceVector, BitArray coverVector) {
 
             int bitToChange = 0;
+            bool[,] matrix = HammingMatrix.Matrix;
+            int hammingCols = HammingMatrix.Cols;
+            int hammingRows = HammingMatrix.Rows;
 
-            for (int col = 0; col < HammingMatrix.Cols; col++) {
+            for (int col = 0; col < hammingCols; col++) {
                 bool realCol = true;
                 // Checks if whole column is equal to differenceVector.
-                for (int row = 0; row < HammingMatrix.Rows && realCol; row++) {
-                    realCol = HammingMatrix.Matrix[row, col] == differenceVector[row];
+                for (int row = 0; row < hammingRows && realCol; row++) {
+                    realCol = matrix[row, col] == differenceVector[row];
                 }
                 if (realCol) {
                     bitToChange = col;
@@ -187,8 +205,6 @@ namespace HammingSteganography {
             }
 
             coverVector[bitToChange] = !coverVector[bitToChange];
-
-            return coverVector;
         }
 
         /// <summary>
@@ -197,15 +213,20 @@ namespace HammingSteganography {
         /// <param name="matrix">Binary matrix.</param>
         /// <param name="vector">Binary vector.</param>
         /// <returns>A binary vector.</returns>
-        private static BitArray BinaryMatrixVectorProduct(HammingMatrix matrix, BitArray vector) {
+        private static BitArray BinaryMatrixVectorProduct(HammingMatrix matrix, BitArray vector)
+        {
 
-            BitArray result = new BitArray(matrix.Rows);
+            int hammingRows = matrix.Rows;
+            int hammingCols = matrix.Cols;
+            bool[,] hammingMatrix = matrix.Matrix;
 
-            for (int row = 0; row < matrix.Rows; row++) {
+            BitArray result = new BitArray(hammingRows);
+
+            for (int row = 0; row < hammingRows; row++) {
                 bool rowResult = false;
-                for (int col = 0; col < matrix.Cols; col++) {
+                for (int col = 0; col < hammingCols; col++) {
                     // (Earlier result + matrix[row, col] * vector[row]) % 2
-                    rowResult = rowResult ^ (matrix.Matrix[row, col] & vector[col]);
+                    rowResult = rowResult ^ (hammingMatrix[row, col] & vector[col]);
                 }
                 result[row] = rowResult;
             }

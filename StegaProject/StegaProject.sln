@@ -1,26 +1,46 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HammingSteganography", "HammingSteganography\HammingSteganography.csproj", "{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HammingSteganographyTests", "HammingSteganographyTests\HammingSteganographyTests.csproj", "{529E3774-FDC3-44E9-BACF-EE6945E42D92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1FDD161F-7D0A-4A4D-9F49-851E471067ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Debug|x64.ActiveCfg = Debug|x64
+		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Debug|x64.Build.0 = Debug|x64
 		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Release|x64.ActiveCfg = Release|x64
+		{B1643C4F-E94F-4B16-93A5-AD13CD57B13B}.Release|x64.Build.0 = Release|x64
 		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Debug|x64.ActiveCfg = Debug|x64
+		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Debug|x64.Build.0 = Debug|x64
 		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Release|x64.ActiveCfg = Release|x64
+		{529E3774-FDC3-44E9-BACF-EE6945E42D92}.Release|x64.Build.0 = Release|x64
+		{1FDD161F-7D0A-4A4D-9F49-851E471067ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FDD161F-7D0A-4A4D-9F49-851E471067ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FDD161F-7D0A-4A4D-9F49-851E471067ED}.Debug|x64.ActiveCfg = Debug|x64
+		{1FDD161F-7D0A-4A4D-9F49-851E471067ED}.Debug|x64.Build.0 = Debug|x64
+		{1FDD161F-7D0A-4A4D-9F49-851E471067ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FDD161F-7D0A-4A4D-9F49-851E471067ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FDD161F-7D0A-4A4D-9F49-851E471067ED}.Release|x64.ActiveCfg = Release|x64
+		{1FDD161F-7D0A-4A4D-9F49-851E471067ED}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
