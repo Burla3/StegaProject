@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 
 namespace HammingSteganography {
-    public delegate void StegaProgressEvent(object sender, ProgressEventArgs e);
     /// <summary>
     /// This interface holds the basics for a steganography method.
     /// </summary>
     public interface ISteganographier {
-        event StegaProgressEvent Progress;
 
         /// <summary>
         /// Decodes an ASCII message from <paramref name="coverData"/>.

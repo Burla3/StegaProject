@@ -5,13 +5,14 @@ using System.Text;
 using Utilities;
 
 namespace HammingSteganography {
+    public delegate void StegaProgressEvent(object sender, ProgressEventArgs e);
 
     /// <summary>
     /// This class holds the implementation for a Hamming steganography method.
     /// It implements the ISteganographier interface.
     /// </summary>
     public class Steganographier : ISteganographier {
-        public event StegaProgressEvent Progress;
+        public static event StegaProgressEvent Progress;
         private HammingMatrix HammingMatrix { get; }
 
         private const int BitsPerAscii = 8;
