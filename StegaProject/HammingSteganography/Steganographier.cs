@@ -5,6 +5,12 @@ using System.Text;
 using Utilities;
 
 namespace HammingSteganography {
+
+    /// <summary>
+    /// Triggers when progress have been made.
+    /// </summary>
+    /// <param name="sender">Object which triggered the event</param>
+    /// <param name="e">ProgressEventArgs which contains information about the progress</param>
     public delegate void StegaProgressEvent(object sender, ProgressEventArgs e);
 
     /// <summary>
@@ -12,6 +18,10 @@ namespace HammingSteganography {
     /// It implements the ISteganographier interface.
     /// </summary>
     public class Steganographier : ISteganographier {
+
+        /// <summary>
+        /// Event that notifies when progress have been made.
+        /// </summary>
         public static event StegaProgressEvent Progress;
         private HammingMatrix HammingMatrix { get; }
 
